@@ -1,303 +1,307 @@
+
 import { useState } from "react";
 import {
-    Package,
-    Clock,
-    CheckCircle,
-    Truck,
-    Plus,
-    Search,
-    Bell,
-    ArrowUpRight,
+  Package,
+  Truck,
+  Users,
+  DollarSign,
+  Search,
+  Bell,
+  ArrowUpRight,
+  Clock,
+  CheckCircle,
+  AlertCircle,
 } from "lucide-react";
 
 import Sidebar from "../components/Sidebar";
 
-function CustomerDashboard() {
-    const [search, setSearch] = useState("");
+function AdminDashboard() {
+  const [search, setSearch] = useState("");
 
+  const shipments = [
+    {
+      id: "CF-2026-001",
+      customer: "John Mwangi",
+      origin: "Mombasa, Kenya",
+      destination: "Dubai, UAE",
+      date: "18 Nov 2026",
+      status: "In Transit",
+    },
+    {
+      id: "CF-2026-002",
+      customer: "Sarah Wanjiku",
+      origin: "Shanghai, China",
+      destination: "Nairobi, Kenya",
+      date: "17 Nov 2026",
+      status: "Delivered",
+    },
+    {
+      id: "CF-2026-003",
+      customer: "David Kamau",
+      origin: "London, UK",
+      destination: "Mombasa, Kenya",
+      date: "16 Nov 2026",
+      status: "Pending",
+    },
+    {
+      id: "CF-2026-004",
+      customer: "Mary Achieng",
+      origin: "New York, USA",
+      destination: "Nairobi, Kenya",
+      date: "15 Nov 2026",
+      status: "In Transit",
+    },
+  ];
 
-    const shipments = [
-        {
-            id: "CF-2026-001",
-            origin: "Mombasa, Kenya",
-            destination: "Dubai, UAE",
-            date: "12 Nov 2026",
-            status: "In Transit",
-        },
-        {
-            id: "CF-2026-002",
-            origin: "Shanghai, China",
-            destination: "Mombasa, Kenya",
-            date: "10 Nov 2026",
-            status: "Delivered",
-        },
-        {
-            id: "CF-2026-003",
-            origin: "London, UK",
-            destination: "Nairobi, Kenya",
-            date: "15 Nov 2026",
-            status: "Pending",
-        },
-        {
-            id: "CF-2026-004",
-            origin: "New York, USA",
-            destination: "Mombasa, Kenya",
-            date: "16 Nov 2026",
-            status: "In Transit",
-        },
-    ];
+  const filteredShipments = shipments.filter((shipment) =>
+    shipment.id.toLowerCase().includes(search.toLowerCase()) ||
+    shipment.customer.toLowerCase().includes(search.toLowerCase())
+  );
 
-    const filteredShipments = shipments.filter((shipment) =>
-        shipment.id.toLowerCase().includes(search.toLowerCase())
-    );
+  const stats = [
+    {
+      title: "Total Shipments",
+      value: "248",
+      change: "+12% this month",
+      icon: Package,
+      color: "bg-blue-100 text-blue-600",
+    },
+    {
+      title: "Active Shipments",
+      value: "86",
+      change: "Currently in transit",
+      icon: Truck,
+      color: "bg-orange-100 text-orange-600",
+    },
+    {
+      title: "Total Customers",
+      value: "124",
+      change: "+8 new customers",
+      icon: Users,
+      color: "bg-green-100 text-green-600",
+    },
+    {
+      title: "Total Revenue",
+      value: "$48,250",
+      change: "+15% this month",
+      icon: DollarSign,
+      color: "bg-purple-100 text-purple-600",
+    },
+  ];
 
+  const activities = [
+    {
+      title: "New shipment registered",
+      description: "CF-2026-005 was created",
+      time: "10 minutes ago",
+      icon: Package,
+    },
+    {
+      title: "Shipment delivered",
+      description: "CF-2026-002 reached Nairobi",
+      time: "1 hour ago",
+      icon: CheckCircle,
+    },
+    {
+      title: "Shipment delayed",
+      description: "CF-2026-003 requires attention",
+      time: "3 hours ago",
+      icon: AlertCircle,
+    },
+  ];
 
-    const stats = [
+  return (
+    <div className="flex min-h-screen bg-slate-100">
+      <Sidebar />
 
+      <main className="flex-1 min-w-0 p-6 md:p-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-800">
+              Admin Dashboard
+            </h1>
+            <p className="text-slate-500 mt-1">
+              Monitor and manage your CargoFlow operations.
+            </p>
+          </div>
 
-        {
-            title: "Total Shipments",
-            value: "12",
-            icon: Package,
-            color: "bg-blue-100 text-blue-600",
-        },
-        {
-            title: "In Transit",
-            value: "4",
-            icon: Truck,
-            color: "bg-orange-100 text-orange-600",
-        },
-        {
-            title: "Delivered",
-            value: "6",
-            icon: CheckCircle,
-            color: "bg-green-100 text-green-600",
-        },
-        {
-            title: "Pending",
-            value: "2",
-            icon: Clock,
-            color: "bg-purple-100 text-purple-600",
-        },
-    ]
+          <div className="flex items-center gap-4">
+            <button className="relative p-3 bg-white rounded-xl shadow-sm text-slate-600">
+              <Bell size={20} />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
 
-    return (
-        <div className="flex min-h-screen bg-slate-100">
-
-            {/* Sidebar */}
-            <Sidebar />
-
-            {/* Main Content */}
-            <main className="flex-1 p-6 md:p-8 overflow-x-hidden">
-
-                {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-
-                    <div>
-                        <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
-                            Customer Dashboard
-                        </h1>
-
-                        <p className="text-slate-500 mt-1">
-                            Welcome back! Here's an overview of your shipments.
-                        </p>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <button className="p-3 bg-white rounded-lg shadow-sm text-slate-600">
-                            <Bell size={20} />
-                        </button>
-
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold">
-                                JD
-                            </div>
-
-                            <div>
-                                <p className="font-semibold text-slate-800 text-sm">
-                                    John Doe
-                                </p>
-                                <p className="text-xs text-slate-500">
-                                    Customer
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                {/* Quick Action */}
-                <div className="bg-slate-900 rounded-xl p-6 mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-
-                    <div>
-                        <h2 className="text-white text-xl font-bold">
-                            Manage Your Shipments
-                        </h2>
-
-                        <p className="text-slate-300 mt-1">
-                            Book and track your cargo shipments with ease.
-                        </p>
-                    </div>
-
-                    <button className="flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-5 py-3 rounded-lg font-semibold transition">
-                        <Plus size={20} />
-                        Book Shipment
-                    </button>
-
-                </div>
-
-                {/* Statistics */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
-
-
-                    {stats.map((stat, index) => {
-                        const Icon = stat.icon;
-
-                        return (
-                            <div
-                                key={index}
-                                className="bg-white p-5 rounded-xl shadow-sm border border-slate-200"
-                            >
-                                <div className="flex items-center justify-between">
-
-                                    <div>
-                                        <p className="text-slate-500 text-sm">
-                                            {stat.title}
-                                        </p>
-
-                                        <h3 className="text-3xl font-bold text-slate-900 mt-2">
-                                            {stat.value}
-                                        </h3>
-                                    </div>
-
-                                    <div className={`p-3 rounded-lg ${stat.color}`}>
-                                        <Icon size={24} />
-                                    </div>
-
-                                </div>
-                            </div>
-                        );
-                    })}
-
-                </div>
-
-                {/* Recent Shipments */}
-                <div className="bg-white rounded-xl shadow-sm border border-slate-200">
-
-                    <div className="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-
-                        <div>
-                            <h2 className="text-xl font-bold text-slate-900">
-                                Recent Shipments
-                            </h2>
-
-                            <p className="text-sm text-slate-500 mt-1">
-                                Monitor your recent cargo deliveries.
-                            </p>
-                        </div>
-
-                        <div className="relative">
-                            <Search
-                                size={18}
-                                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-                            />
-
-                            <input
-                                type="text"
-                                placeholder="Search shipment ID..."
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                className="border border-slate-300 rounded-lg pl-10 pr-4 py-2 outline-none focus:ring-2 focus:ring-teal-500 w-full sm:w-64"
-                            />
-                        </div>
-
-                    </div>
-
-                    {/* Table */}
-                    <div className="overflow-x-auto">
-
-                        <table className="w-full text-left">
-
-                            <thead className="bg-slate-50 text-slate-500 text-sm">
-                                <tr>
-                                    <th className="px-6 py-4">Shipment ID</th>
-                                    <th className="px-6 py-4">Origin</th>
-                                    <th className="px-6 py-4">Destination</th>
-                                    <th className="px-6 py-4">Booking Date</th>
-                                    <th className="px-6 py-4">Status</th>
-                                    <th className="px-6 py-4">Action</th>
-                                </tr>
-                            </thead>
-
-                            <tbody className="divide-y divide-slate-100">
-
-                                {filteredShipments.map((shipment) => (
-
-                                    <tr key={shipment.id} className="hover:bg-slate-50">
-
-                                        <td className="px-6 py-4 font-semibold text-slate-800">
-                                            {shipment.id}
-                                        </td>
-
-                                        <td className="px-6 py-4 text-slate-600 text-sm">
-                                            {shipment.origin}
-                                        </td>
-
-                                        <td className="px-6 py-4 text-slate-600 text-sm">
-                                            {shipment.destination}
-                                        </td>
-
-                                        <td className="px-6 py-4 text-slate-600 text-sm">
-                                            {shipment.date}
-                                        </td>
-
-                                        <td className="px-6 py-4">
-                                            <span
-                                                className={`px-3 py-1 rounded-full text-xs font-semibold ${shipment.status === "Delivered"
-                                                        ? "bg-green-100 text-green-700"
-                                                        : shipment.status === "In Transit"
-                                                            ? "bg-orange-100 text-orange-700"
-                                                            : "bg-purple-100 text-purple-700"
-                                                    }`}
-                                            >
-                                                {shipment.status}
-                                            </span>
-                                        </td>
-
-                                        <td className="px-6 py-4">
-                                            <button className="text-teal-600 hover:text-teal-800">
-                                                <ArrowUpRight size={20} />
-                                            </button>
-                                        </td>
-
-                                    </tr>
-
-                                ))}
-
-                                {filteredShipments.length === 0 && (
-                                    <tr>
-                                        <td colSpan="6" className="text-center py-8 text-slate-500">
-                                            No shipments found.
-                                        </td>
-                                    </tr>
-                                )}
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </main>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
+                A
+              </div>
+              <div>
+                <p className="font-semibold text-slate-800">Administrator</p>
+                <p className="text-xs text-slate-500">System Manager</p>
+              </div>
+            </div>
+          </div>
         </div>
-    );
+
+        {/* Statistics */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+          {stats.map((stat) => {
+            const Icon = stat.icon;
+
+            return (
+              <div
+                key={stat.title}
+                className="bg-white p-5 rounded-2xl shadow-sm"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`p-3 rounded-xl ${stat.color}`}>
+                    <Icon size={22} />
+                  </div>
+                  <ArrowUpRight className="text-slate-400" size={20} />
+                </div>
+
+                <p className="text-sm text-slate-500">{stat.title}</p>
+                <h2 className="text-2xl font-bold text-slate-800 mt-1">
+                  {stat.value}
+                </h2>
+                <p className="text-xs text-slate-500 mt-2">{stat.change}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Main content */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+          {/* Shipments table */}
+          <div className="xl:col-span-2 bg-white rounded-2xl shadow-sm p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+              <div>
+                <h2 className="text-lg font-bold text-slate-800">
+                  Recent Shipments
+                </h2>
+                <p className="text-sm text-slate-500">
+                  Overview of recently registered shipments
+                </p>
+              </div>
+
+              <div className="relative">
+                <Search
+                  size={18}
+                  className="absolute left-3 top-3 text-slate-400"
+                />
+                <input
+                  type="text"
+                  placeholder="Search shipments..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full sm:w-56 pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left min-w-[650px]">
+                <thead>
+                  <tr className="border-b border-slate-200 text-slate-500 text-sm">
+                    <th className="py-3">Shipment ID</th>
+                    <th className="py-3">Customer</th>
+                    <th className="py-3">Route</th>
+                    <th className="py-3">Status</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {filteredShipments.map((shipment) => (
+                    <tr
+                      key={shipment.id}
+                      className="border-b border-slate-100 text-sm"
+                    >
+                      <td className="py-4 font-semibold text-blue-600">
+                        {shipment.id}
+                      </td>
+                      <td className="py-4 text-slate-700">
+                        {shipment.customer}
+                      </td>
+                      <td className="py-4 text-slate-600">
+                        {shipment.origin} → {shipment.destination}
+                      </td>
+                      <td className="py-4">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            shipment.status === "Delivered"
+                              ? "bg-green-100 text-green-700"
+                              : shipment.status === "In Transit"
+                              ? "bg-blue-100 text-blue-700"
+                              : "bg-orange-100 text-orange-700"
+                          }`}
+                        >
+                          {shipment.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+
+                  {filteredShipments.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan="4"
+                        className="py-8 text-center text-slate-500"
+                      >
+                        No matching shipments found.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Recent activity */}
+          <div className="bg-white rounded-2xl shadow-sm p-6">
+            <h2 className="text-lg font-bold text-slate-800">
+              Recent Activity
+            </h2>
+            <p className="text-sm text-slate-500 mb-6">
+              Latest system updates
+            </p>
+
+            <div className="space-y-6">
+              {activities.map((activity, index) => {
+                const Icon = activity.icon;
+
+                return (
+                  <div key={index} className="flex gap-3">
+                    <div className="bg-blue-100 text-blue-600 p-2 rounded-lg h-fit">
+                      <Icon size={18} />
+                    </div>
+
+                    <div>
+                      <p className="text-sm font-semibold text-slate-800">
+                        {activity.title}
+                      </p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        {activity.description}
+                      </p>
+                      <p className="text-xs text-slate-400 mt-2 flex items-center gap-1">
+                        <Clock size={12} />
+                        {activity.time}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <p className="text-xs text-slate-400 mt-6">
+          CargoFlow Admin Portal · Dashboard data is currently sample data.
+        </p>
+      </main>
+    </div>
+  );
 }
 
-export default CustomerDashboard;
-
-
-
-
-
+export default AdminDashboard;
