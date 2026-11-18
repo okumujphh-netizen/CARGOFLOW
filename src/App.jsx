@@ -23,6 +23,9 @@ function App() {
             <Navbar />
             <Home />
             <Footer />
+            <About />
+            <Services />
+            <Hero />
           </>
         }
       />
