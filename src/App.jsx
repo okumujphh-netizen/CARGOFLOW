@@ -1,29 +1,28 @@
 
+import Navbar from "./components/Navbar";
+
 function App() {
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
-      <div className="bg-white p-10 rounded-2xl shadow-xl text-center max-w-lg">
-        <h1 className="text-4xl font-bold text-blue-600 mb-4">
-          CargoFlow
-        </h1>
+    <>
+      <Navbar />
 
-        <p className="text-gray-600 text-lg">
-          Smart Shipping & Container Management Platform
-        </p>
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
+        <div className="bg-white p-10 rounded-2xl shadow-xl text-center max-w-lg">
+          <h1 className="text-4xl font-bold text-blue-600 mb-4">
+            CargoFlow
+          </h1>
 
-        <button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition">
-          Get Started
-        </button>
+          <p className="text-gray-600 text-lg">
+            Smart Shipping & Container Management Platform
+          </p>
 
-        <p className="mt-6 text-sm text-green-600 font-semibold">
-          Tailwind CSS is working!
-        </p>
+          <button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition">
+            Get Started
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
 export default App;
-
-
-
