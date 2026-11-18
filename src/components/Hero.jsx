@@ -84,9 +84,3 @@ function hero(){
     </section>
   );
 }
-
-
-    
-
-
- 
