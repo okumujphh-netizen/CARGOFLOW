@@ -84,4 +84,28 @@ function About() {
   );
 }
 
+{benefits.map((benefit, index) => {
+            const Icon = benefit.icon;
+
+            return (
+              <div key={index} className="bg-white p-6 rounded-xl shadow-sm">
+                <div className="bg-blue-50 text-blue-600 w-12 h-12 rounded-lg flex items-center justify-center">
+                  <Icon size={25} />
+                </div>
+
+                <h3 className="font-bold text-slate-900 mt-4">
+                  {benefit.title}
+                </h3>
+
+                <p className="text-slate-600 text-sm mt-2 leading-relaxed">
+                  {benefit.description}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
 
