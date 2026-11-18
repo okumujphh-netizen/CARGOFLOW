@@ -18,8 +18,9 @@ function Navbar() {
           </span>
         </Link>
 
+
         {/* Navigation links */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           <Link to="/" className="text-slate-600 hover:text-blue-600">
             Home
           </Link>
@@ -32,10 +33,15 @@ function Navbar() {
             About
           </a>
 
-          <a href="#contact" className="text-slate-600 hover:text-blue-600">
-            Contact
-          </a>
+          <Link to="/dashboard" className="text-slate-600 hover:text-blue-600">
+            Customer
+          </Link>
+
+          <Link to="/admin" className="text-slate-600 hover:text-blue-600">
+            Admin
+          </Link>
         </div>
+
 
         {/* Action buttons */}
         <div className="flex items-center gap-3">
