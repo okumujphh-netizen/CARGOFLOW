@@ -93,4 +93,4 @@ function Services() {
   );
 }
 
-export default services;
+export default Services;
