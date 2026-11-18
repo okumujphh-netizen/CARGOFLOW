@@ -85,7 +85,7 @@ function CustomerDashboard() {
         <div className="flex min-h-screen bg-slate-100">
 
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar role="customer" />
 
             {/* Main Content */}
             <main className="flex-1 p-6 md:p-8 overflow-x-hidden">
