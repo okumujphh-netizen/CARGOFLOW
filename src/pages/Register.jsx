@@ -1,42 +1,41 @@
+
 import { useState } from "react";
-import { Link } from "lucide-react";
-import { Eye, Eyeoff,Ship } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Eye, EyeOff, Ship } from "lucide-react";
 
-function register (){
+function Register() {
+
   const [showPassword, setShowPassword] = useState(false);
-  const [ showConfirmPassword, setShowConfirmPassword] = useState(false);
-}
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-const [formData,setFormData]= useState({
-  fullname:"",
-  email:"",
-  phone:"",
-  password:"",
-  confirmPassword:"",
-
-})
-
-function handleChange(e){
-  setFormData({
-    ... formData,
-    [e.target.name]: e.target.value,
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
   });
-}
 
-function handlesubmit(e){
-  e.preventDefault();
-}
+  function handleChange(e) {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  }
 
-if (formData.password !== formData.confirmPassword) {
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
     alert("Registration form submitted successfully!");
-  
-  
-    return(
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-10">
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-10">
 
       <div className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-lg">
 
@@ -189,8 +188,7 @@ if (formData.password !== formData.confirmPassword) {
       </div>
     </div>
   );
+}
 
-  export default register;
-  
-
+export default Register;
 
