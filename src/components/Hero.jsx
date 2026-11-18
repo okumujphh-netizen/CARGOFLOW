@@ -84,3 +84,4 @@ function hero(){
     </section>
   );
 }
+export default hero;
