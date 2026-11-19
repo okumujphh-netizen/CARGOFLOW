@@ -33,13 +33,12 @@ function Sidebar({ role = "customer" }) {
 
   const adminMenu = [
     { name: "Dashboard", path: "/admin", icon: LayoutDashboard },
-    { name: "Shipments", path: "/shipments", icon: Package },
+    { name: "Shipments", path: "/admin/shipments", icon: Package },
     { name: "Containers", path: "/containers", icon: Container },
     { name: "Transportation", path: "/transportation", icon: Truck },
     { name: "Customers", path: "/customers", icon: Users },
     { name: "Settings", path: "/settings", icon: Settings },
   ];
-
   const menuItems = role === "admin" ? adminMenu : customerMenu;
 
   return (
@@ -108,10 +107,9 @@ function Sidebar({ role = "customer" }) {
                 end={item.path === "/dashboard" || item.path === "/admin"}
                 onClick={() => setIsOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-3 rounded-lg transition ${
-                    isActive
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                  `flex items-center gap-3 px-4 py-3 rounded-lg transition ${isActive
+                    ? "bg-blue-600 text-white"
+                    : "text-slate-400 hover:bg-slate-800 hover:text-white"
                   }`
                 }
               >
