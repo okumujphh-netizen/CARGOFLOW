@@ -8,6 +8,7 @@ import CustomerDashboard from "./pages/CustomerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import BookShipment from "./pages/BookShipment";
 import MyShipments from "./pages/MyShipments";
+import AdminShipments from "./pages/AdminShipments";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -47,6 +48,15 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+  path="/admin/shipments"
+  element={
+    <ProtectedRoute allowedRole="admin">
+      <AdminShipments />
+    </ProtectedRoute>
+  }
+/>
 
       {/* Customer Booking Route */}
       <Route
