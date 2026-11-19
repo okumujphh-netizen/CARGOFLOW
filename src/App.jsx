@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import BookShipment from "./pages/BookShipment";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -17,7 +18,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-      {/* Customer Protected Route */}
+      {/* Customer Protected Routes */}
       <Route
         path="/dashboard"
         element={
@@ -27,7 +28,7 @@ function App() {
         }
       />
 
-      {/* Admin Protected Route */}
+      {/* Admin Protected Routes */}
       <Route
         path="/admin"
         element={
@@ -36,9 +37,21 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      {/* Customer Booking Route */}
+      <Route
+        path="/book-shipment"
+        element={
+          <ProtectedRoute allowedRole="customer">
+            <BookShipment />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
 
 export default App;
+
+
 
