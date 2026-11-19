@@ -13,26 +13,47 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+
   async function handleSubmit(e) {
     e.preventDefault();
 
     setError("");
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    setLoading(false);
-
     if (error) {
+      setLoading(false);
       setError(error.message);
       return;
     }
 
-    navigate("/dashboard");
+    // Retrieve the user's role from the profiles table
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", data.user.id)
+      .single();
+
+    setLoading(false);
+
+    if (profileError || !profile) {
+      await supabase.auth.signOut();
+      setError("Unable to retrieve your account role. Please try again.");
+      return;
+    }
+
+    // Redirect according to account role
+    if (profile.role === "admin") {
+      navigate("/admin");
+    } else {
+      navigate("/dashboard");
+    }
   }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-10">
