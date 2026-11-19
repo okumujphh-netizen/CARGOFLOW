@@ -41,11 +41,18 @@ function Login() {
     setLoading(false);
 
     if (profileError || !profile) {
+      console.error("Profile retrieval error:", profileError);
+
       await supabase.auth.signOut();
-      setError("Unable to retrieve your account role. Please try again.");
+
+      setError(
+        profileError
+          ? profileError.message
+          : "No profile was found for this account."
+      );
+
       return;
     }
-
     // Redirect according to account role
     if (profile.role === "admin") {
       navigate("/admin");
