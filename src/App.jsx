@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import BookShipment from "./pages/BookShipment";
+import MyShipments from "./pages/MyShipments";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -24,6 +25,15 @@ function App() {
         element={
           <ProtectedRoute allowedRole="customer">
             <CustomerDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/shipments"
+        element={
+          <ProtectedRoute allowedRole="customer">
+            <MyShipments />
           </ProtectedRoute>
         }
       />
