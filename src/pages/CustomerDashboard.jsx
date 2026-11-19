@@ -1,5 +1,7 @@
 
+
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Package,
     Clock,
@@ -15,6 +17,8 @@ import Sidebar from "../components/Sidebar";
 import { supabase } from "../lib/supabase";
 
 function CustomerDashboard() {
+    const navigate = useNavigate();
+
     const [search, setSearch] = useState("");
     const [shipments, setShipments] = useState([]);
     const [customerName, setCustomerName] = useState("Customer");
@@ -209,7 +213,11 @@ function CustomerDashboard() {
                         </p>
                     </div>
 
-                    <button className="flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-5 py-3 rounded-lg font-semibold transition">
+                    <button
+                        type="button"
+                        onClick={() => navigate("/book-shipment")}
+                        className="flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-5 py-3 rounded-lg font-semibold transition"
+                    >
                         <Plus size={20} />
                         Book Shipment
                     </button>
@@ -361,10 +369,3 @@ function CustomerDashboard() {
 }
 
 export default CustomerDashboard;
-
-
-
-
-
-
-
