@@ -179,7 +179,7 @@ function AdminDashboard() {
     <div className="flex min-h-screen bg-slate-100">
       <Sidebar role="admin" />
 
-      <main className="flex-1 min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden">
+     <main className="flex-1 min-w-0 p-4 pt-20 md:p-8 md:pt-8 overflow-x-hidden">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>

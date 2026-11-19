@@ -1,42 +1,67 @@
 
 import { Routes, Route } from "react-router-dom";
 
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import Services from "./components/Services";
-import About from "./components/About";
-import Footer from "./components/Footer";
-
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import BookShipment from "./pages/BookShipment";
+import MyShipments from "./pages/MyShipments";
+
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
     <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      {/* Customer Protected Routes */}
       <Route
-        path="/"
+        path="/dashboard"
         element={
-          <>
-            <Navbar />
-            <Home />
-            <Footer />
-            <About />
-            <Services />
-            <Hero />
-          </>
+          <ProtectedRoute allowedRole="customer">
+            <CustomerDashboard />
+          </ProtectedRoute>
         }
       />
 
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<CustomerDashboard />} />
-      <Route path="/admin" element={<AdminDashboard />} />
+      <Route
+        path="/shipments"
+        element={
+          <ProtectedRoute allowedRole="customer">
+            <MyShipments />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Admin Protected Routes */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Customer Booking Route */}
+      <Route
+        path="/book-shipment"
+        element={
+          <ProtectedRoute allowedRole="customer">
+            <BookShipment />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
 
 export default App;
+
+
 
