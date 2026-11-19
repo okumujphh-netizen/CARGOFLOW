@@ -4,58 +4,34 @@ import { Navigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
 function ProtectedRoute({ children, allowedRole }) {
-  const [session, setSession] = useState(null);
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState("loading");
+  const [role, setRole] = useState(null);
   const [error, setError] = useState("");
 
-  // Check whether the user has an active session
   useEffect(() => {
     let mounted = true;
 
-    async function getInitialSession() {
-      const { data, error } = await supabase.auth.getSession();
+    async function checkAccess() {
+      setStatus("loading");
+      setError("");
+
+      const { data: { session }, error: sessionError } =
+        await supabase.auth.getSession();
 
       if (!mounted) return;
 
-      if (error) {
-        setError(error.message);
-        setLoading(false);
+      if (sessionError) {
+        setError(sessionError.message);
+        setStatus("error");
         return;
       }
 
-      setSession(data.session);
-    }
-
-    getInitialSession();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession);
-    });
-
-    return () => {
-      mounted = false;
-      subscription.unsubscribe();
-    };
-  }, []);
-
-  // Retrieve the authenticated user's role
-  useEffect(() => {
-    let mounted = true;
-
-    async function getProfile() {
       if (!session) {
-        setProfile(null);
-        setLoading(false);
+        setStatus("unauthenticated");
         return;
       }
 
-      setLoading(true);
-      setError("");
-
-      const { data, error } = await supabase
+      const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("role")
         .eq("id", session.user.id)
@@ -63,24 +39,24 @@ function ProtectedRoute({ children, allowedRole }) {
 
       if (!mounted) return;
 
-      if (error) {
-        setError(error.message);
-        setProfile(null);
-      } else {
-        setProfile(data);
+      if (profileError || !profile) {
+        setError(profileError?.message || "Profile not found.");
+        setStatus("error");
+        return;
       }
 
-      setLoading(false);
+      setRole(profile.role);
+      setStatus("authenticated");
     }
 
-    getProfile();
+    checkAccess();
 
     return () => {
       mounted = false;
     };
-  }, [session]);
+  }, []);
 
-  if (loading) {
+  if (status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <p className="text-slate-600">Checking authentication...</p>
@@ -88,11 +64,11 @@ function ProtectedRoute({ children, allowedRole }) {
     );
   }
 
-  if (!session) {
+  if (status === "unauthenticated") {
     return <Navigate to="/login" replace />;
   }
 
-  if (error) {
+  if (status === "error") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
         <div className="text-center">
@@ -100,7 +76,10 @@ function ProtectedRoute({ children, allowedRole }) {
             Unable to verify your account: {error}
           </p>
           <button
-            onClick={() => supabase.auth.signOut()}
+            onClick={async () => {
+              await supabase.auth.signOut();
+              window.location.href = "/login";
+            }}
             className="bg-teal-600 text-white px-5 py-2 rounded-lg"
           >
             Sign Out
@@ -110,14 +89,10 @@ function ProtectedRoute({ children, allowedRole }) {
     );
   }
 
-  if (!profile) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (profile.role !== allowedRole) {
+  if (role !== allowedRole) {
     return (
       <Navigate
-        to={profile.role === "admin" ? "/admin" : "/dashboard"}
+        to={role === "admin" ? "/admin" : "/dashboard"}
         replace
       />
     );
@@ -127,3 +102,4 @@ function ProtectedRoute({ children, allowedRole }) {
 }
 
 export default ProtectedRoute;
+
