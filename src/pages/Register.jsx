@@ -1,4 +1,5 @@
 
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Ship } from "lucide-react";
@@ -70,143 +71,174 @@ function Register() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-10">
-      <div className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-lg">
-        <Link to="/" className="flex items-center gap-2 mb-8">
-          <Ship size={30} className="text-teal-600" />
-          <span className="text-2xl font-bold text-slate-900">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-6 sm:py-10">
+      <div className="w-full max-w-lg min-w-0 bg-white p-5 sm:p-8 rounded-2xl shadow-lg">
+
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 mb-7 sm:mb-8 w-fit">
+          <Ship size={28} className="text-teal-600 shrink-0" />
+
+          <span className="text-xl sm:text-2xl font-bold text-slate-900">
             Cargo<span className="text-teal-600">Flow</span>
           </span>
         </Link>
 
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">
+        {/* Heading */}
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
           Create Account
         </h1>
 
-        <p className="text-slate-500 mb-8">
+        <p className="text-sm sm:text-base text-slate-500 mb-7 sm:mb-8">
           Join CargoFlow and manage your shipments with ease.
         </p>
 
+        {/* Registration Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
+
+          {/* Full Name */}
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label htmlFor="fullName" className="block text-sm font-medium text-slate-700 mb-2">
               Full Name
             </label>
+
             <input
+              id="fullName"
               type="text"
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
               placeholder="Enter your full name"
-              className="w-full border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-teal-500"
+              autoComplete="name"
+              className="w-full min-w-0 border border-slate-300 rounded-lg px-4 py-3 text-base outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
               required
             />
           </div>
 
+          {/* Email */}
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
               Email Address
             </label>
+
             <input
+              id="email"
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               placeholder="you@example.com"
-              className="w-full border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-teal-500"
+              autoComplete="email"
+              className="w-full min-w-0 border border-slate-300 rounded-lg px-4 py-3 text-base outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
               required
             />
           </div>
 
+          {/* Phone */}
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-2">
               Phone Number
             </label>
+
             <input
+              id="phone"
               type="tel"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
               placeholder="+254 7XX XXX XXX"
-              className="w-full border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-teal-500"
+              autoComplete="tel"
+              className="w-full min-w-0 border border-slate-300 rounded-lg px-4 py-3 text-base outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
               required
             />
           </div>
 
+          {/* Password */}
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
               Password
             </label>
+
             <div className="relative">
               <input
+                id="password"
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Create a password"
-                className="w-full border border-slate-300 rounded-lg px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-teal-500"
+                autoComplete="new-password"
+                className="w-full min-w-0 border border-slate-300 rounded-lg px-4 py-3 pr-12 text-base outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
                 required
                 minLength={8}
               />
+
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-slate-800 transition"
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
 
+          {/* Confirm Password */}
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700 mb-2">
               Confirm Password
             </label>
+
             <div className="relative">
               <input
+                id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Confirm your password"
-                className="w-full border border-slate-300 rounded-lg px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-teal-500"
+                autoComplete="new-password"
+                className="w-full min-w-0 border border-slate-300 rounded-lg px-4 py-3 pr-12 text-base outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
                 required
                 minLength={8}
               />
+
               <button
                 type="button"
-                onClick={() =>
-                  setShowConfirmPassword(!showConfirmPassword)
-                }
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                aria-label={showConfirmPassword ? "Hide confirmation password" : "Show confirmation password"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-slate-800 transition"
               >
-                {showConfirmPassword ? (
-                  <EyeOff size={20} />
-                ) : (
-                  <Eye size={20} />
-                )}
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
 
+          {/* Error and Success Messages */}
           {error && (
-            <p className="text-sm text-red-600">{error}</p>
+            <p role="alert" className="text-sm text-red-600 break-words">
+              {error}
+            </p>
           )}
 
           {success && (
-            <p className="text-sm text-green-600">{success}</p>
+            <p role="status" className="text-sm text-green-600 break-words">
+              {success}
+            </p>
           )}
 
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition disabled:opacity-60"
+            className="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 
-        <p className="text-center text-sm text-slate-500 mt-8">
+        {/* Login Link */}
+        <p className="text-center text-sm text-slate-500 mt-7 sm:mt-8">
           Already have an account?{" "}
           <Link
             to="/login"
@@ -221,5 +253,3 @@ function Register() {
 }
 
 export default Register;
-
-
