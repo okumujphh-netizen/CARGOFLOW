@@ -205,5 +205,31 @@ function Containers() {
   };
 
 
+  const filteredContainers = containers.filter((item) => {
+    const searchText = [
+      item.container_number,
+      item.container_type,
+      item.capacity,
+      item.status,
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return searchText.includes(search.toLowerCase());
+  });
+
+  const getStatusStyle = (status) => {
+    const styles = {
+      available: "bg-green-100 text-green-700",
+      assigned: "bg-blue-100 text-blue-700",
+      maintenance: "bg-yellow-100 text-yellow-700",
+    };
+
+    return styles[status] || "bg-gray-100 text-gray-700";
+  };
+
+  
+
+
 }
 
