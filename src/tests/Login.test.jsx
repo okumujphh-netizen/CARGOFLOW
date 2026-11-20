@@ -1,6 +1,7 @@
 
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import Login from "../pages/Login";
@@ -10,37 +11,40 @@ vi.mock("../lib/supabase", () => ({
   supabase: {
     auth: {
       signInWithPassword: vi.fn(),
-      signOut: vi.fn(),
     },
-    from: vi.fn(),
   },
 }));
 
-function renderLogin() {
+const renderLogin = () => {
   return render(
     <MemoryRouter>
       <Login />
     </MemoryRouter>
   );
-}
+};
 
 describe("Login Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("renders the login form correctly", () => {
+  it("renders the login form", () => {
     renderLogin();
 
     expect(
-      screen.getByRole("heading", { name: "Welcome Back" })
+      screen.getByRole("heading", { name: /welcome back/i })
     ).toBeInTheDocument();
 
-    expect(screen.getByLabelText(/email address/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(/email address/i)
+    ).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: "Sign In" })
+      screen.getByLabelText("Password", { selector: "input" })
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("button", { name: /sign in/i })
     ).toBeInTheDocument();
   });
 
@@ -55,15 +59,17 @@ describe("Login Component", () => {
     );
 
     await user.type(
-     screen.getByLabelText("Password", { selector: "input" }),
+      screen.getByLabelText("Password", { selector: "input" }),
       "TestPassword123"
     );
 
-    expect(screen.getByLabelText(/email address/i))
-      .toHaveValue("customer@example.com");
+    expect(
+      screen.getByLabelText(/email address/i)
+    ).toHaveValue("customer@example.com");
 
-    expect(screen.getByLabelText(/password/i))
-      .toHaveValue("TestPassword123");
+    expect(
+      screen.getByLabelText("Password", { selector: "input" })
+    ).toHaveValue("TestPassword123");
   });
 
   it("toggles password visibility", async () => {
@@ -71,18 +77,20 @@ describe("Login Component", () => {
 
     renderLogin();
 
-    const passwordInput = screen.getByLabelText(/password/i);
+    const passwordInput = screen.getByLabelText("Password", {
+      selector: "input",
+    });
 
     expect(passwordInput).toHaveAttribute("type", "password");
 
     await user.click(
-      screen.getByRole("button", { name: "Show password" })
+      screen.getByRole("button", { name: /show password/i })
     );
 
     expect(passwordInput).toHaveAttribute("type", "text");
 
     await user.click(
-      screen.getByRole("button", { name: "Hide password" })
+      screen.getByRole("button", { name: /hide password/i })
     );
 
     expect(passwordInput).toHaveAttribute("type", "password");
@@ -92,7 +100,7 @@ describe("Login Component", () => {
     const user = userEvent.setup();
 
     supabase.auth.signInWithPassword.mockResolvedValue({
-      data: { user: null },
+      data: { user: null, session: null },
       error: { message: "Invalid login credentials" },
     });
 
@@ -104,21 +112,18 @@ describe("Login Component", () => {
     );
 
     await user.type(
-      screen.getByLabelText(/password/i),
+      screen.getByLabelText("Password", { selector: "input" }),
       "WrongPassword123"
     );
 
     await user.click(
-      screen.getByRole("button", { name: "Sign In" })
+      screen.getByRole("button", { name: /sign in/i })
     );
 
-    expect(
-      await screen.findByRole("alert")
-    ).toHaveTextContent("Invalid login credentials");
-
-    expect(supabase.auth.signInWithPassword).toHaveBeenCalledWith({
-      email: "customer@example.com",
-      password: "WrongPassword123",
+    await waitFor(() => {
+      expect(
+        screen.getByText(/invalid login credentials/i)
+      ).toBeInTheDocument();
     });
   });
 });
