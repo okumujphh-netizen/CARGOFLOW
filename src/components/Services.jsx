@@ -38,35 +38,35 @@ function Services() {
   return (
     <section
       id="services"
-      className="bg-white py-16 sm:py-20 px-5 sm:px-8 md:px-12"
+      className="bg-white py-14 sm:py-16 lg:py-20 px-4 sm:px-8 md:px-12"
     >
       <div className="max-w-7xl mx-auto">
 
         {/* Section Heading */}
-        <div className="text-center max-w-2xl mx-auto mb-12 md:mb-14">
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12 md:mb-14">
           <span className="text-blue-600 font-semibold uppercase tracking-wider text-xs sm:text-sm">
             What We Offer
           </span>
 
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mt-3">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mt-3">
             Our Shipping Solutions
           </h2>
 
-          <p className="text-slate-600 mt-4 leading-relaxed">
+          <p className="text-slate-600 mt-4 leading-relaxed text-sm sm:text-base">
             Everything you need to manage your shipping and logistics
             operations in one platform.
           </p>
         </div>
 
         {/* Service Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
           {services.map((service) => {
             const Icon = service.icon;
 
             return (
               <div
                 key={service.title}
-                className="group p-6 sm:p-7 border border-slate-200 rounded-2xl hover:shadow-xl hover:border-blue-300 hover:-translate-y-1 transition-all duration-300"
+                className="group h-full p-5 sm:p-6 lg:p-7 border border-slate-200 rounded-2xl hover:shadow-xl hover:border-blue-300 hover:-translate-y-1 transition-all duration-300"
               >
                 {/* Icon */}
                 <div className="bg-blue-50 text-blue-600 w-14 h-14 rounded-xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
@@ -74,7 +74,7 @@ function Services() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-slate-900 mt-6">
+                <h3 className="text-lg sm:text-xl font-bold text-slate-900 mt-5 sm:mt-6">
                   {service.title}
                 </h3>
 
