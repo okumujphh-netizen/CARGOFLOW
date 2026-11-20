@@ -1,8 +1,10 @@
 
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
+
 import Register from "../pages/Register";
 import { supabase } from "../lib/supabase";
 
@@ -14,18 +16,18 @@ vi.mock("../lib/supabase", () => ({
     },
 }));
 
-const renderRegister = () => {
-    return render(
-        <MemoryRouter>
-            <Register />
-        </MemoryRouter>
-    );
-};
-
 describe("Register Component", () => {
     beforeEach(() => {
         vi.clearAllMocks();
     });
+
+    const renderRegister = () => {
+        return render(
+            <MemoryRouter>
+                <Register />
+            </MemoryRouter>
+        );
+    };
 
     it("renders the registration form", () => {
         renderRegister();
@@ -34,10 +36,26 @@ describe("Register Component", () => {
             screen.getByRole("heading", { name: /create account/i })
         ).toBeInTheDocument();
 
-        expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
-        expect(screen.getByLabelText(/email address/i)).toBeInTheDocument();
+        expect(
+            screen.getByLabelText(/full name/i)
+        ).toBeInTheDocument();
+
+        expect(
+            screen.getByLabelText(/email address/i)
+        ).toBeInTheDocument();
+
+        expect(
+            screen.getByLabelText(/phone number/i)
+        ).toBeInTheDocument();
+
         expect(
             screen.getByLabelText("Password", { selector: "input" })
+        ).toBeInTheDocument();
+
+        expect(
+            screen.getByLabelText("Confirm Password", {
+                selector: "input",
+            })
         ).toBeInTheDocument();
 
         expect(
@@ -61,17 +79,19 @@ describe("Register Component", () => {
         );
 
         await user.type(
-            screen.getByLabelText("Password", { selector: "input" }),
-            "TestPassword123"
-        );
-
-        await user.type(
             screen.getByLabelText(/phone number/i),
             "+254712345678"
         );
 
         await user.type(
-            screen.getByLabelText("Confirm Password", { selector: "input" }),
+            screen.getByLabelText("Password", { selector: "input" }),
+            "TestPassword123"
+        );
+
+        await user.type(
+            screen.getByLabelText("Confirm Password", {
+                selector: "input",
+            }),
             "TestPassword123"
         );
 
@@ -83,8 +103,18 @@ describe("Register Component", () => {
             "customer@example.com"
         );
 
+        expect(screen.getByLabelText(/phone number/i)).toHaveValue(
+            "+254712345678"
+        );
+
         expect(
             screen.getByLabelText("Password", { selector: "input" })
+        ).toHaveValue("TestPassword123");
+
+        expect(
+            screen.getByLabelText("Confirm Password", {
+                selector: "input",
+            })
         ).toHaveValue("TestPassword123");
     });
 
@@ -116,8 +146,13 @@ describe("Register Component", () => {
         const user = userEvent.setup();
 
         supabase.auth.signUp.mockResolvedValue({
-            data: { user: null, session: null },
-            error: { message: "Email already registered" },
+            data: {
+                user: null,
+                session: null,
+            },
+            error: {
+                message: "Email already registered",
+            },
         });
 
         renderRegister();
@@ -133,7 +168,19 @@ describe("Register Component", () => {
         );
 
         await user.type(
+            screen.getByLabelText(/phone number/i),
+            "+254712345678"
+        );
+
+        await user.type(
             screen.getByLabelText("Password", { selector: "input" }),
+            "TestPassword123"
+        );
+
+        await user.type(
+            screen.getByLabelText("Confirm Password", {
+                selector: "input",
+            }),
             "TestPassword123"
         );
 
@@ -146,5 +193,7 @@ describe("Register Component", () => {
                 screen.getByText(/email already registered/i)
             ).toBeInTheDocument();
         });
+
+        expect(supabase.auth.signUp).toHaveBeenCalled();
     });
 });
