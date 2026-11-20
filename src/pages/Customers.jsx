@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import {
   Users,
@@ -114,24 +115,46 @@ function Customers() {
       shipment.status === "in_transit"
   ).length;
 
-  return (
+  const stats = [
+    {
+      label: "Total Customers",
+      value: customers.length,
+      icon: Users,
+      color: "bg-blue-50 text-blue-600",
+    },
+    {
+      label: "Total Shipments",
+      value: totalCustomerShipments,
+      icon: Package,
+      color: "bg-purple-50 text-purple-600",
+    },
+    {
+      label: "Active Shipments",
+      value: activeShipments,
+      icon: Package,
+      color: "bg-green-50 text-green-600",
+    },
+  ];
 
+  return (
     <div className="flex min-h-screen bg-slate-50">
       <Sidebar />
 
-      <main className="min-w-0 flex-1 p-6 md:p-8">
+      <main className="min-w-0 flex-1 p-4 sm:p-5 md:p-8">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <div>
-              <p className="mb-2 text-sm font-medium text-blue-600">
+
+          {/* Header */}
+          <div className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <p className="mb-2 text-xs font-semibold tracking-wide text-blue-600 sm:text-sm">
                 ADMINISTRATION
               </p>
 
-              <h1 className="text-3xl font-bold text-slate-900">
+              <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
                 Customer Management
               </h1>
 
-              <p className="mt-2 text-slate-500">
+              <p className="mt-2 text-sm leading-6 text-slate-500 sm:text-base">
                 View registered customers and their shipment activity.
               </p>
             </div>
@@ -140,7 +163,7 @@ function Customers() {
               type="button"
               onClick={fetchCustomers}
               disabled={loading}
-              className="flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-3 font-medium text-slate-700 transition hover:bg-slate-100 disabled:opacity-60"
+              className="flex w-full flex-shrink-0 items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100 disabled:opacity-60 sm:w-auto sm:text-base"
             >
               <RefreshCw
                 size={18}
@@ -150,60 +173,42 @@ function Customers() {
             </button>
           </div>
 
-          <div className="mb-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-500">
-                    Total Customers
-                  </p>
-                  <h2 className="mt-2 text-3xl font-bold text-slate-900">
-                    {customers.length}
-                  </h2>
-                </div>
+          {/* Statistics */}
+          <div className="mb-6 grid grid-cols-2 gap-3 sm:mb-8 sm:gap-4 lg:grid-cols-3">
+            {stats.map((stat) => {
+              const Icon = stat.icon;
 
-                <div className="rounded-lg bg-blue-50 p-3 text-blue-600">
-                  <Users size={25} />
-                </div>
-              </div>
-            </div>
+              return (
+                <div
+                  key={stat.label}
+                  className={`min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-5 ${
+                    stat.label === "Active Shipments"
+                      ? "col-span-2 sm:col-span-1"
+                      : ""
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-xs text-slate-500 sm:text-sm">
+                        {stat.label}
+                      </p>
 
-            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-500">
-                    Total Shipments
-                  </p>
-                  <h2 className="mt-2 text-3xl font-bold text-slate-900">
-                    {totalCustomerShipments}
-                  </h2>
-                </div>
+                      <h2 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">
+                        {stat.value}
+                      </h2>
+                    </div>
 
-                <div className="rounded-lg bg-purple-50 p-3 text-purple-600">
-                  <Package size={25} />
+                    <div className={`flex-shrink-0 rounded-lg p-2 sm:p-3 ${stat.color}`}>
+                      <Icon size={21} className="sm:h-6 sm:w-6" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-500">
-                    Active Shipments
-                  </p>
-                  <h2 className="mt-2 text-3xl font-bold text-slate-900">
-                    {activeShipments}
-                  </h2>
-                </div>
-
-                <div className="rounded-lg bg-green-50 p-3 text-green-600">
-                  <Package size={25} />
-                </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
 
-          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          {/* Search */}
+          <div className="mb-5 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:mb-6 sm:p-4">
             <div className="relative">
               <Search
                 size={19}
@@ -215,31 +220,37 @@ function Customers() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search customers by name, phone or customer ID..."
-                className="w-full rounded-lg border border-slate-300 py-3 pl-10 pr-4 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                aria-label="Search customers"
+                className="w-full rounded-lg border border-slate-300 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:text-base"
               />
             </div>
           </div>
 
+          {/* Error */}
           {error && (
-            <div className="mb-6 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-              <AlertCircle size={20} className="shrink-0" />
-              {error}
+            <div
+              role="alert"
+              className="mb-5 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 sm:mb-6 sm:p-4"
+            >
+              <AlertCircle size={20} className="mt-0.5 flex-shrink-0" />
+              <span className="break-words">{error}</span>
             </div>
           )}
 
+          {/* Customer List */}
           <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-            <div className="border-b border-slate-200 p-5">
-              <h2 className="text-lg font-bold text-slate-900">
+            <div className="border-b border-slate-200 p-4 sm:p-5">
+              <h2 className="text-base font-bold text-slate-900 sm:text-lg">
                 Registered Customers
               </h2>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-xs text-slate-500 sm:text-sm">
                 {filteredCustomers.length} customer(s) found
               </p>
             </div>
 
             {loading ? (
-              <div className="p-12 text-center text-slate-500">
+              <div className="p-8 text-center text-slate-500 sm:p-12">
                 <RefreshCw
                   size={28}
                   className="mx-auto mb-3 animate-spin text-blue-600"
@@ -247,7 +258,7 @@ function Customers() {
                 Loading customers...
               </div>
             ) : filteredCustomers.length === 0 ? (
-              <div className="p-12 text-center">
+              <div className="p-8 text-center sm:p-12">
                 <Users
                   size={40}
                   className="mx-auto mb-3 text-slate-300"
@@ -264,67 +275,67 @@ function Customers() {
             ) : (
               <div className="divide-y divide-slate-100">
                 {filteredCustomers.map((customer) => {
-                  const customerShipments = getCustomerShipments(
-                    customer.id
-                  );
-
-                  const isExpanded =
-                    expandedCustomer === customer.id;
+                  const customerShipments = getCustomerShipments(customer.id);
+                  const isExpanded = expandedCustomer === customer.id;
 
                   return (
-                    <div key={customer.id}>
-                      <div className="flex flex-col justify-between gap-4 p-5 lg:flex-row lg:items-center">
-                        <div className="flex min-w-0 items-center gap-4">
-                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                    <div key={customer.id} className="min-w-0">
+
+                      {/* Customer Information */}
+                      <div className="flex flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
+                        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+                          <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600 sm:h-12 sm:w-12">
                             <Users size={22} />
                           </div>
 
                           <div className="min-w-0">
-                            <h3 className="truncate font-semibold text-slate-900">
+                            <h3 className="break-words font-semibold text-slate-900">
                               {customer.full_name || "Unnamed Customer"}
                             </h3>
 
-                            <p className="mt-1 text-xs text-slate-400">
+                            <p className="mt-1 break-all text-xs text-slate-400">
                               ID: {customer.id}
                             </p>
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:items-center">
-                          <div>
+                        {/* Customer Details */}
+                        <div className="grid grid-cols-2 gap-x-3 gap-y-4 sm:grid-cols-3 sm:gap-5 lg:flex-1 lg:justify-center">
+                          <div className="min-w-0">
                             <p className="text-xs text-slate-500">
                               Phone
                             </p>
 
-                            <p className="mt-1 flex items-center gap-1 text-sm font-medium text-slate-700">
-                              <Phone size={14} />
+                            <p className="mt-1 flex items-start gap-1 break-words text-xs font-medium text-slate-700 sm:text-sm">
+                              <Phone size={14} className="mt-0.5 flex-shrink-0" />
                               {customer.phone || "Not provided"}
                             </p>
                           </div>
 
-                          <div>
+                          <div className="min-w-0">
                             <p className="text-xs text-slate-500">
                               Registered
                             </p>
 
-                            <p className="mt-1 flex items-center gap-1 text-sm font-medium text-slate-700">
-                              <Calendar size={14} />
+                            <p className="mt-1 flex items-start gap-1 text-xs font-medium text-slate-700 sm:text-sm">
+                              <Calendar size={14} className="mt-0.5 flex-shrink-0" />
                               {formatDate(customer.created_at)}
                             </p>
                           </div>
 
-                          <div>
+                          <div className="min-w-0">
                             <p className="text-xs text-slate-500">
                               Shipments
                             </p>
 
-                            <p className="mt-1 flex items-center gap-1 text-sm font-semibold text-slate-900">
+                            <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-slate-900 sm:text-sm">
                               <Package size={15} />
                               {customerShipments.length}
                             </p>
                           </div>
                         </div>
 
+                        {/* Expand Button */}
                         <button
                           type="button"
                           onClick={() =>
@@ -332,7 +343,8 @@ function Customers() {
                               isExpanded ? null : customer.id
                             )
                           }
-                          className="flex items-center justify-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                          aria-expanded={isExpanded}
+                          className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 lg:w-auto lg:flex-shrink-0"
                         >
                           {isExpanded ? "Hide Details" : "View Details"}
 
@@ -344,14 +356,15 @@ function Customers() {
                         </button>
                       </div>
 
+                      {/* Shipment History */}
                       {isExpanded && (
-                        <div className="border-t border-slate-100 bg-slate-50 p-5">
-                          <h4 className="mb-4 font-semibold text-slate-800">
+                        <div className="border-t border-slate-100 bg-slate-50 p-4 sm:p-5">
+                          <h4 className="mb-4 text-sm font-semibold text-slate-800 sm:text-base">
                             Customer Shipment History
                           </h4>
 
                           {customerShipments.length === 0 ? (
-                            <p className="rounded-lg bg-white p-5 text-sm text-slate-500">
+                            <p className="rounded-lg bg-white p-4 text-sm text-slate-500 sm:p-5">
                               This customer has not booked any shipments yet.
                             </p>
                           ) : (
@@ -359,15 +372,15 @@ function Customers() {
                               {customerShipments.map((shipment) => (
                                 <div
                                   key={shipment.id}
-                                  className="rounded-lg border border-slate-200 bg-white p-4"
+                                  className="min-w-0 rounded-lg border border-slate-200 bg-white p-3 sm:p-4"
                                 >
-                                  <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-                                    <div>
-                                      <p className="font-semibold text-slate-900">
+                                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                    <div className="min-w-0">
+                                      <p className="break-all text-sm font-semibold text-slate-900 sm:text-base">
                                         {shipment.tracking_number}
                                       </p>
 
-                                      <p className="mt-1 text-sm text-slate-600">
+                                      <p className="mt-1 break-words text-sm text-slate-600">
                                         {shipment.origin} → {shipment.destination}
                                       </p>
 
@@ -377,7 +390,7 @@ function Customers() {
                                     </div>
 
                                     <span
-                                      className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${getStatusStyle(
+                                      className={`w-fit flex-shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${getStatusStyle(
                                         shipment.status
                                       )}`}
                                     >
@@ -403,4 +416,3 @@ function Customers() {
 }
 
 export default Customers;
-
