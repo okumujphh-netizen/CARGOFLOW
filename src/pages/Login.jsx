@@ -1,5 +1,6 @@
 
 
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Ship, Eye, EyeOff } from "lucide-react";
@@ -20,7 +21,6 @@ function Login() {
     setError("");
     setLoading(true);
 
-    // Authenticate user with Supabase
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -32,7 +32,6 @@ function Login() {
       return;
     }
 
-    // Retrieve user's role from the profiles table
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("role")
@@ -45,7 +44,6 @@ function Login() {
       await supabase.auth.signOut();
 
       setLoading(false);
-
       setError(
         profileError
           ? profileError.message
@@ -57,39 +55,32 @@ function Login() {
 
     setLoading(false);
 
-    // Redirect according to account role
-    console.log("Login successful");
-    console.log("User ID:", data.user.id);
-    console.log("User role:", profile.role);
-
     if (profile.role === "admin") {
-      console.log("Redirecting to admin dashboard");
       navigate("/admin", { replace: true });
     } else {
-      console.log("Redirecting to customer dashboard");
       navigate("/dashboard", { replace: true });
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-10">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 py-6 sm:py-10">
+      <div className="w-full max-w-md min-w-0 bg-white p-5 sm:p-8 rounded-2xl shadow-lg">
 
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 mb-10">
-          <Ship size={30} className="text-teal-600" />
+        <Link to="/" className="flex items-center gap-2 mb-8 sm:mb-10 w-fit">
+          <Ship size={28} className="text-teal-600 shrink-0" />
 
-          <span className="text-2xl font-bold text-slate-900">
+          <span className="text-xl sm:text-2xl font-bold text-slate-900">
             Cargo<span className="text-teal-600">Flow</span>
           </span>
         </Link>
 
         {/* Heading */}
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
           Welcome Back
         </h1>
 
-        <p className="text-slate-500 mb-8">
+        <p className="text-sm sm:text-base text-slate-500 mb-7 sm:mb-8">
           Sign in to manage your shipments.
         </p>
 
@@ -98,53 +89,54 @@ function Login() {
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
               Email Address
             </label>
 
             <input
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-teal-500"
+              autoComplete="email"
+              className="w-full min-w-0 border border-slate-300 rounded-lg px-4 py-3 text-base outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
               required
             />
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
               Password
             </label>
 
             <div className="relative">
               <input
+                id="password"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="w-full border border-slate-300 rounded-lg px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-teal-500"
+                autoComplete="current-password"
+                className="w-full min-w-0 border border-slate-300 rounded-lg px-4 py-3 pr-12 text-base outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition"
                 required
               />
 
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-slate-800 transition"
               >
-                {showPassword ? (
-                  <EyeOff size={20} />
-                ) : (
-                  <Eye size={20} />
-                )}
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
 
           {/* Error Message */}
           {error && (
-            <p className="text-sm text-red-600">
+            <p role="alert" className="text-sm text-red-600 break-words">
               {error}
             </p>
           )}
@@ -153,15 +145,14 @@ function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition disabled:opacity-60"
+            className="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? "Signing In..." : "Sign In"}
           </button>
-
         </form>
 
         {/* Register Link */}
-        <p className="text-center text-sm text-slate-500 mt-8">
+        <p className="text-center text-sm text-slate-500 mt-7 sm:mt-8">
           Don't have an account?{" "}
           <Link
             to="/register"
@@ -170,10 +161,10 @@ function Login() {
             Create Account
           </Link>
         </p>
-
       </div>
     </div>
   );
 }
 
 export default Login;
+
