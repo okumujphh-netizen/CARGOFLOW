@@ -76,10 +76,23 @@ function AdminShipments() {
     fetchShipments();
   }, []);
 
+
   const updateStatus = async (shipmentId, newStatus) => {
     setUpdatingId(shipmentId);
     setError("");
     setSuccess("");
+
+    const shipment = shipments.find(
+      (item) => item.id === shipmentId
+    );
+
+    if (!shipment) {
+      setError("Shipment could not be found.");
+      setUpdatingId(null);
+      return;
+    }
+
+    const previousStatus = shipment.status;
 
     const { error: updateError } = await supabase
       .from("shipments")
@@ -88,20 +101,57 @@ function AdminShipments() {
 
     if (updateError) {
       setError(updateError.message);
-    } else {
-      setShipments((previous) =>
-        previous.map((shipment) =>
-          shipment.id === shipmentId
-            ? { ...shipment, status: newStatus }
-            : shipment
-        )
-      );
+      setUpdatingId(null);
+      return;
+    }
 
+    setShipments((previous) =>
+      previous.map((item) =>
+        item.id === shipmentId
+          ? { ...item, status: newStatus }
+          : item
+      )
+    );
+
+    if (previousStatus !== newStatus) {
+      const statusMessages = {
+        pending: "Your shipment is now pending confirmation.",
+        confirmed: "Your shipment has been confirmed and is being prepared.",
+        in_transit: "Your shipment is now in transit.",
+        delivered: "Your shipment has been successfully delivered.",
+        cancelled: "Your shipment has been cancelled.",
+      };
+
+      const { error: notificationError } = await supabase
+        .from("notifications")
+        .insert([
+          {
+            user_id: shipment.customer_id,
+            title: `Shipment ${newStatus.replaceAll("_", " ")}`,
+            message: `Shipment ${shipment.tracking_number}: ${
+              statusMessages[newStatus] ||
+              `Your shipment status has changed to ${newStatus}.`
+            }`,
+            is_read: false,
+          },
+        ]);
+
+      if (notificationError) {
+        setError(
+          `Shipment updated, but notification could not be created: ${notificationError.message}`
+        );
+      } else {
+        setSuccess(
+          "Shipment status updated and customer notification created successfully."
+        );
+      }
+    } else {
       setSuccess("Shipment status updated successfully.");
     }
 
     setUpdatingId(null);
   };
+
 
   const deleteShipment = async (shipment) => {
     const confirmed = window.confirm(
