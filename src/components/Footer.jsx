@@ -1,11 +1,15 @@
 
+
 import { Ship, Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer id="contact" className="bg-slate-950 text-white px-5 sm:px-8 md:px-12 py-14">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+    <footer
+      id="contact"
+      className="bg-slate-950 text-white px-4 sm:px-8 md:px-12 py-12 sm:py-14"
+    >
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
 
         {/* Company */}
         <div>
@@ -14,12 +18,12 @@ function Footer() {
               <Ship size={24} />
             </div>
 
-            <span className="text-2xl font-bold">
+            <span className="text-xl sm:text-2xl font-bold">
               Cargo<span className="text-blue-500">Flow</span>
             </span>
           </Link>
 
-          <p className="text-slate-400 mt-5 leading-relaxed max-w-xs">
+          <p className="text-slate-400 text-sm sm:text-base mt-5 leading-relaxed max-w-xs">
             Smart shipping and container management for a connected world.
           </p>
         </div>
@@ -28,7 +32,7 @@ function Footer() {
         <div>
           <h3 className="font-bold text-lg mb-5">Quick Links</h3>
 
-          <ul className="space-y-3 text-slate-400">
+          <ul className="space-y-3 text-sm sm:text-base text-slate-400">
             <li>
               <Link to="/" className="hover:text-blue-400 transition">
                 Home
@@ -65,7 +69,7 @@ function Footer() {
         <div>
           <h3 className="font-bold text-lg mb-5">Our Services</h3>
 
-          <ul className="space-y-3 text-slate-400">
+          <ul className="space-y-3 text-sm sm:text-base text-slate-400">
             <li>Ocean Freight</li>
             <li>Container Management</li>
             <li>Cargo Transportation</li>
@@ -77,8 +81,8 @@ function Footer() {
         <div>
           <h3 className="font-bold text-lg mb-5">Contact Us</h3>
 
-          <ul className="space-y-4 text-slate-400">
-            <li className="flex items-start gap-3">
+          <ul className="space-y-4 text-sm sm:text-base text-slate-400">
+            <li className="flex items-start gap-3 min-w-0">
               <Mail size={18} className="text-blue-400 shrink-0 mt-1" />
               <a
                 href="mailto:info@cargoflow.com"
@@ -107,8 +111,8 @@ function Footer() {
       </div>
 
       {/* Copyright */}
-      <div className="max-w-7xl mx-auto border-t border-slate-800 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-        <p className="text-slate-500 text-sm">
+      <div className="max-w-7xl mx-auto border-t border-slate-800 mt-10 sm:mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+        <p className="text-slate-500 text-xs sm:text-sm">
           © {new Date().getFullYear()} CargoFlow. All rights reserved.
         </p>
 
@@ -129,4 +133,3 @@ function Footer() {
 }
 
 export default Footer;
-
