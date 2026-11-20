@@ -10,6 +10,7 @@ import BookShipment from "./pages/BookShipment";
 import MyShipments from "./pages/myshipments";
 import AdminShipments from "./pages/AdminShipments";
 import Containers from "./pages/Containers";
+import TrackShipment from "./pages/TrackShipment";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -45,6 +46,15 @@ function App() {
         element={
           <ProtectedRoute allowedRole="customer">
             <BookShipment />
+          </ProtectedRoute>
+        }
+      />
+
+       <Route
+        path="/track-shipment"
+        element={
+          <ProtectedRoute allowedRole="customer">
+            <TrackShipment />
           </ProtectedRoute>
         }
       />
