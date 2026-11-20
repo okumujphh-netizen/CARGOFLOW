@@ -9,6 +9,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import BookShipment from "./pages/BookShipment";
 import MyShipments from "./pages/myshipments";
 import AdminShipments from "./pages/AdminShipments";
+import Containers from "./pages/Containers";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -39,6 +40,15 @@ function App() {
         }
       />
 
+      <Route
+        path="/book-shipment"
+        element={
+          <ProtectedRoute allowedRole="customer">
+            <BookShipment />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Admin Protected Routes */}
       <Route
         path="/admin"
@@ -50,20 +60,19 @@ function App() {
       />
 
       <Route
-  path="/admin/shipments"
-  element={
-    <ProtectedRoute allowedRole="admin">
-      <AdminShipments />
-    </ProtectedRoute>
-  }
-/>
-
-      {/* Customer Booking Route */}
-      <Route
-        path="/book-shipment"
+        path="/admin/shipments"
         element={
-          <ProtectedRoute allowedRole="customer">
-            <BookShipment />
+          <ProtectedRoute allowedRole="admin">
+            <AdminShipments />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/containers"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <Containers />
           </ProtectedRoute>
         }
       />
@@ -72,6 +81,7 @@ function App() {
 }
 
 export default App;
+p;
 
 
 
