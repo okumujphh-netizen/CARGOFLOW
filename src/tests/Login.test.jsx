@@ -55,7 +55,7 @@ describe("Login Component", () => {
     );
 
     await user.type(
-      screen.getByLabelText(/password/i),
+     screen.getByLabelText("Password", { selector: "input" }),
       "TestPassword123"
     );
 
