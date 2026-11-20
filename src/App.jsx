@@ -7,7 +7,7 @@ import Register from "./pages/Register";
 import CustomerDashboard from "./pages/CustomerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import BookShipment from "./pages/BookShipment";
-import MyShipments from "./pages/MyShipments";
+import MyShipments from "./pages/myshipments";
 import AdminShipments from "./pages/AdminShipments";
 
 import ProtectedRoute from "./components/ProtectedRoute";
