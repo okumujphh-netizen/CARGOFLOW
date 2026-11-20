@@ -13,6 +13,7 @@ import Containers from "./pages/Containers";
 import TrackShipment from "./pages/TrackShipment";
 import Customers from "./pages/Customers";
 import Transportation from "./pages/Transportation";
+import Notifications from "./pages/Notifications";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -25,6 +26,15 @@ function App() {
       <Route path="/register" element={<Register />} />
 
       {/* Customer Protected Routes */}
+
+      <Route
+        path="/notifications"
+        element={
+          <ProtectedRoute allowedRole="customer">
+            <Notifications />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/dashboard"
         element={
