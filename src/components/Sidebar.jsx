@@ -1,4 +1,5 @@
 
+
 import { useState } from "react";
 
 import {
@@ -47,9 +48,11 @@ function Sidebar({ role = "customer" }) {
     <>
       {/* Mobile menu button */}
       <button
+        type="button"
         onClick={() => setIsOpen(true)}
         className="md:hidden fixed top-4 left-4 z-50 bg-slate-950 text-white p-3 rounded-lg shadow-lg"
         aria-label="Open navigation menu"
+        aria-expanded={isOpen}
       >
         <Menu size={22} />
       </button>
@@ -59,6 +62,7 @@ function Sidebar({ role = "customer" }) {
         <div
           onClick={() => setIsOpen(false)}
           className="md:hidden fixed inset-0 bg-black/50 z-40"
+          aria-hidden="true"
         />
       )}
 
@@ -70,6 +74,7 @@ function Sidebar({ role = "customer" }) {
           transition-transform duration-300
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
+        aria-label="Main navigation"
       >
         {/* Logo and close button */}
         <div className="flex items-center justify-between mb-10">
@@ -84,6 +89,7 @@ function Sidebar({ role = "customer" }) {
           </div>
 
           <button
+            type="button"
             onClick={() => setIsOpen(false)}
             className="md:hidden text-slate-400 hover:text-white"
             aria-label="Close navigation menu"
@@ -109,10 +115,9 @@ function Sidebar({ role = "customer" }) {
                 end={item.path === "/dashboard" || item.path === "/admin"}
                 onClick={() => setIsOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-3 rounded-lg transition ${
-                    isActive
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                  `flex items-center gap-3 px-4 py-3 rounded-lg transition ${isActive
+                    ? "bg-blue-600 text-white"
+                    : "text-slate-400 hover:bg-slate-800 hover:text-white"
                   }`
                 }
               >
@@ -125,6 +130,7 @@ function Sidebar({ role = "customer" }) {
 
         {/* Logout */}
         <button
+          type="button"
           onClick={() => navigate("/login")}
           className="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-red-600 hover:text-white rounded-lg transition"
         >
@@ -137,3 +143,4 @@ function Sidebar({ role = "customer" }) {
 }
 
 export default Sidebar;
+
