@@ -1,4 +1,5 @@
  
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -67,30 +68,30 @@ function MyShipments() {
     }
 
     function formatStatus(status) {
-        return status.replaceAll("_", " ");
+        return (status || "unknown").replaceAll("_", " ");
     }
 
     return (
         <div className="flex min-h-screen bg-slate-100">
             <Sidebar role="customer" />
 
-            <main className="flex-1 min-w-0 p-6 md:p-10">
+            <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-10">
                 <div className="max-w-7xl mx-auto">
 
                     {/* Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-                        <div>
-                            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+                        <div className="min-w-0">
+                            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
                                 My Shipments
                             </h1>
-                            <p className="text-slate-500 mt-2">
+                            <p className="text-sm sm:text-base text-slate-500 mt-2">
                                 View and manage your shipping bookings.
                             </p>
                         </div>
 
                         <Link
                             to="/book-shipment"
-                            className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold transition"
+                            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold text-sm sm:text-base transition"
                         >
                             <Plus size={20} />
                             Book Shipment
@@ -98,13 +99,16 @@ function MyShipments() {
                     </div>
 
                     {/* Shipment count */}
-                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-5 mb-6">
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-5 mb-5 sm:mb-6">
                         <div className="flex items-center gap-3">
-                            <div className="bg-blue-100 text-blue-600 p-3 rounded-lg">
-                                <Package size={24} />
+                            <div className="bg-blue-100 text-blue-600 p-3 rounded-lg shrink-0">
+                                <Package size={22} />
                             </div>
+
                             <div>
-                                <p className="text-sm text-slate-500">Total Shipments</p>
+                                <p className="text-sm text-slate-500">
+                                    Total Shipments
+                                </p>
                                 <h2 className="text-2xl font-bold text-slate-900">
                                     {shipments.length}
                                 </h2>
@@ -114,36 +118,49 @@ function MyShipments() {
 
                     {/* Loading */}
                     {loading && (
-                        <div className="bg-white rounded-xl p-10 text-center shadow-sm">
-                            <RefreshCw className="animate-spin mx-auto text-blue-600 mb-3" size={30} />
-                            <p className="text-slate-500">Loading your shipments...</p>
+                        <div className="bg-white rounded-xl p-8 sm:p-10 text-center shadow-sm">
+                            <RefreshCw
+                                className="animate-spin mx-auto text-blue-600 mb-3"
+                                size={30}
+                            />
+                            <p className="text-sm sm:text-base text-slate-500">
+                                Loading your shipments...
+                            </p>
                         </div>
                     )}
 
                     {/* Error */}
                     {!loading && error && (
-                        <div className="bg-white rounded-xl p-6 border border-red-200 text-red-600">
+                        <div className="bg-white rounded-xl p-5 sm:p-6 border border-red-200 text-red-600">
                             <div className="flex items-center gap-2 mb-2">
-                                <AlertCircle size={20} />
-                                <span className="font-semibold">Unable to load shipments</span>
+                                <AlertCircle size={20} className="shrink-0" />
+                                <span className="font-semibold">
+                                    Unable to load shipments
+                                </span>
                             </div>
-                            <p className="text-sm">{error}</p>
+                            <p className="text-sm break-words">{error}</p>
                         </div>
                     )}
 
                     {/* Empty state */}
                     {!loading && !error && shipments.length === 0 && (
-                        <div className="bg-white rounded-xl shadow-sm p-10 text-center">
-                            <Package size={48} className="mx-auto text-slate-300 mb-4" />
-                            <h2 className="text-xl font-bold text-slate-800 mb-2">
+                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-10 text-center">
+                            <Package
+                                size={44}
+                                className="mx-auto text-slate-300 mb-4"
+                            />
+
+                            <h2 className="text-lg sm:text-xl font-bold text-slate-800 mb-2">
                                 No shipments yet
                             </h2>
-                            <p className="text-slate-500 mb-6">
+
+                            <p className="text-sm sm:text-base text-slate-500 mb-6">
                                 Your bookings will appear here once you create your first shipment.
                             </p>
+
                             <Link
                                 to="/book-shipment"
-                                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold transition"
+                                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold transition"
                             >
                                 <Plus size={19} />
                                 Book Your First Shipment
@@ -157,20 +174,22 @@ function MyShipments() {
                             {shipments.map((shipment) => (
                                 <div
                                     key={shipment.id}
-                                    className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 md:p-6"
+                                    className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 sm:p-5 lg:p-6"
                                 >
-                                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
-                                        <div>
+                                    {/* Tracking number and status */}
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+                                        <div className="min-w-0">
                                             <p className="text-xs text-slate-500 mb-1">
                                                 Tracking Number
                                             </p>
-                                            <h3 className="font-bold text-blue-600 text-lg">
+
+                                            <h3 className="font-bold text-blue-600 text-base sm:text-lg break-all">
                                                 {shipment.tracking_number}
                                             </h3>
                                         </div>
 
                                         <span
-                                            className={`inline-flex w-fit px-3 py-1 rounded-full text-sm font-semibold capitalize ${getStatusStyle(
+                                            className={`inline-flex w-fit px-3 py-1 rounded-full text-xs sm:text-sm font-semibold capitalize ${getStatusStyle(
                                                 shipment.status
                                             )}`}
                                         >
@@ -178,54 +197,76 @@ function MyShipments() {
                                         </span>
                                     </div>
 
-                                    <div className="grid sm:grid-cols-2 gap-5">
-                                        <div className="flex items-start gap-3">
-                                            <MapPin className="text-blue-600 mt-1 shrink-0" size={20} />
-                                            <div>
-                                                <p className="text-xs text-slate-500">Origin</p>
-                                                <p className="font-medium text-slate-800">
+                                    {/* Shipment information */}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                                        <div className="flex items-start gap-3 min-w-0">
+                                            <MapPin
+                                                className="text-blue-600 mt-1 shrink-0"
+                                                size={20}
+                                            />
+                                            <div className="min-w-0">
+                                                <p className="text-xs text-slate-500">
+                                                    Origin
+                                                </p>
+                                                <p className="font-medium text-sm sm:text-base text-slate-800 break-words">
                                                     {shipment.origin}
                                                 </p>
                                             </div>
                                         </div>
 
-                                        <div className="flex items-start gap-3">
-                                            <MapPin className="text-teal-600 mt-1 shrink-0" size={20} />
-                                            <div>
-                                                <p className="text-xs text-slate-500">Destination</p>
-                                                <p className="font-medium text-slate-800">
+                                        <div className="flex items-start gap-3 min-w-0">
+                                            <MapPin
+                                                className="text-teal-600 mt-1 shrink-0"
+                                                size={20}
+                                            />
+                                            <div className="min-w-0">
+                                                <p className="text-xs text-slate-500">
+                                                    Destination
+                                                </p>
+                                                <p className="font-medium text-sm sm:text-base text-slate-800 break-words">
                                                     {shipment.destination}
                                                 </p>
                                             </div>
                                         </div>
 
-                                        <div className="flex items-start gap-3">
-                                            <Calendar className="text-slate-500 mt-1 shrink-0" size={20} />
-                                            <div>
-                                                <p className="text-xs text-slate-500">Booking Date</p>
-                                                <p className="font-medium text-slate-800">
+                                        <div className="flex items-start gap-3 min-w-0">
+                                            <Calendar
+                                                className="text-slate-500 mt-1 shrink-0"
+                                                size={20}
+                                            />
+                                            <div className="min-w-0">
+                                                <p className="text-xs text-slate-500">
+                                                    Booking Date
+                                                </p>
+                                                <p className="font-medium text-sm sm:text-base text-slate-800 break-words">
                                                     {shipment.booking_date || "Not available"}
                                                 </p>
                                             </div>
                                         </div>
 
-                                        <div className="flex items-start gap-3">
-                                            <Calendar className="text-slate-500 mt-1 shrink-0" size={20} />
-                                            <div>
-                                                <p className="text-xs text-slate-500">Estimated Delivery</p>
-                                                <p className="font-medium text-slate-800">
+                                        <div className="flex items-start gap-3 min-w-0">
+                                            <Calendar
+                                                className="text-slate-500 mt-1 shrink-0"
+                                                size={20}
+                                            />
+                                            <div className="min-w-0">
+                                                <p className="text-xs text-slate-500">
+                                                    Estimated Delivery
+                                                </p>
+                                                <p className="font-medium text-sm sm:text-base text-slate-800 break-words">
                                                     {shipment.estimated_delivery || "Not scheduled"}
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
 
+                                    {/* Cargo description */}
                                     {shipment.cargo_description && (
                                         <div className="border-t border-slate-100 mt-5 pt-4">
                                             <p className="text-xs text-slate-500 mb-1">
                                                 Cargo Description
                                             </p>
-                                            <p className="text-sm text-slate-700">
+                                            <p className="text-sm text-slate-700 break-words">
                                                 {shipment.cargo_description}
                                             </p>
                                         </div>
