@@ -1,5 +1,6 @@
 
 
+
 import {
   Globe,
   ShieldCheck,
@@ -38,42 +39,42 @@ function About() {
   return (
     <section
       id="about"
-      className="bg-slate-50 py-16 sm:py-20 px-5 sm:px-8 md:px-12"
+      className="bg-slate-50 py-14 sm:py-16 lg:py-20 px-4 sm:px-8 md:px-12"
     >
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-14 items-center">
 
         {/* About Content */}
-        <div>
+        <div className="min-w-0">
           <span className="text-blue-600 font-semibold uppercase tracking-wider text-xs sm:text-sm">
             About CargoFlow
           </span>
 
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mt-3 leading-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mt-3 leading-tight">
             Making Global Shipping Simpler and Smarter
           </h2>
 
-          <p className="text-slate-600 mt-6 leading-relaxed">
+          <p className="text-slate-600 text-sm sm:text-base mt-5 sm:mt-6 leading-relaxed">
             CargoFlow is a smart shipping and container management platform
             designed to simplify international logistics. It brings shipment
             tracking, container management and customer services together in
             one convenient place.
           </p>
 
-          <p className="text-slate-600 mt-4 leading-relaxed">
+          <p className="text-slate-600 text-sm sm:text-base mt-4 leading-relaxed">
             Our goal is to improve visibility, organisation and communication
             throughout the shipping process.
           </p>
         </div>
 
         {/* Benefits Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
           {benefits.map((benefit) => {
             const Icon = benefit.icon;
 
             return (
               <div
                 key={benefit.title}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                className="h-full bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="bg-blue-50 text-blue-600 w-12 h-12 rounded-xl flex items-center justify-center">
                   <Icon size={25} />
@@ -97,3 +98,4 @@ function About() {
 }
 
 export default About;
+
