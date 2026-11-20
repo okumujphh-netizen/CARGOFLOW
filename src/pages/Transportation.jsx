@@ -1,4 +1,5 @@
 
+
 import { useEffect, useState } from "react";
 import {
   Truck,
@@ -9,7 +10,6 @@ import {
   Trash2,
   MapPin,
   Calendar,
-  Package,
   X,
   AlertCircle,
   Clock,
@@ -157,9 +157,7 @@ function Transportation() {
       return;
     }
 
-    if (
-      new Date(form.arrival_date) < new Date(form.departure_date)
-    ) {
+    if (new Date(form.arrival_date) < new Date(form.departure_date)) {
       setError("Arrival date cannot be earlier than departure date.");
       return;
     }
@@ -314,35 +312,62 @@ function Transportation() {
     });
   };
 
+  const stats = [
+    {
+      label: "Total Records",
+      value: transportation.length,
+      icon: Truck,
+      color: "text-blue-600 bg-blue-50",
+    },
+    {
+      label: "Scheduled",
+      value: transportation.filter((r) => r.status === "scheduled").length,
+      icon: Calendar,
+      color: "text-yellow-600 bg-yellow-50",
+    },
+    {
+      label: "In Transit",
+      value: transportation.filter((r) => r.status === "in_transit").length,
+      icon: Clock,
+      color: "text-purple-600 bg-purple-50",
+    },
+    {
+      label: "Completed",
+      value: transportation.filter((r) => r.status === "completed").length,
+      icon: CheckCircle,
+      color: "text-green-600 bg-green-50",
+    },
+  ];
+
   return (
     <div className="flex min-h-screen bg-slate-100">
       <Sidebar role="admin" />
 
-      <main className="min-w-0 flex-1 p-4 md:p-8">
+      <main className="min-w-0 flex-1 p-4 sm:p-5 md:p-8">
         <div className="mx-auto max-w-7xl">
 
           {/* Header */}
-          <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <div>
-              <p className="mb-2 text-sm font-medium text-blue-600">
+          <div className="mb-6 flex flex-col gap-4 sm:mb-8 lg:flex-row lg:items-center lg:justify-between">
+            <div className="min-w-0">
+              <p className="mb-2 text-xs font-semibold tracking-wide text-blue-600 sm:text-sm">
                 ADMINISTRATION
               </p>
 
-              <h1 className="text-2xl font-bold text-slate-900 md:text-3xl">
+              <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
                 Transportation Management
               </h1>
 
-              <p className="mt-2 text-slate-500">
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
                 Manage shipment transportation, vehicles, routes and schedules.
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:flex-shrink-0">
               <button
                 type="button"
                 onClick={fetchData}
                 disabled={loading}
-                className="flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-3 font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                className="flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-50 sm:text-base"
               >
                 <RefreshCw
                   size={18}
@@ -354,7 +379,7 @@ function Transportation() {
               <button
                 type="button"
                 onClick={openAddForm}
-                className="flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-3 font-medium text-white transition hover:bg-blue-700"
+                className="flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-blue-700 sm:text-base"
               >
                 <Plus size={19} />
                 Add Transportation
@@ -363,59 +388,28 @@ function Transportation() {
           </div>
 
           {/* Statistics */}
-          <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {[
-              {
-                label: "Total Records",
-                value: transportation.length,
-                icon: Truck,
-                color: "text-blue-600 bg-blue-50",
-              },
-              {
-                label: "Scheduled",
-                value: transportation.filter(
-                  (r) => r.status === "scheduled"
-                ).length,
-                icon: Calendar,
-                color: "text-yellow-600 bg-yellow-50",
-              },
-              {
-                label: "In Transit",
-                value: transportation.filter(
-                  (r) => r.status === "in_transit"
-                ).length,
-                icon: Clock,
-                color: "text-purple-600 bg-purple-50",
-              },
-              {
-                label: "Completed",
-                value: transportation.filter(
-                  (r) => r.status === "completed"
-                ).length,
-                icon: CheckCircle,
-                color: "text-green-600 bg-green-50",
-              },
-            ].map((stat) => {
+          <div className="mb-6 grid grid-cols-2 gap-3 sm:mb-8 sm:gap-4 xl:grid-cols-4">
+            {stats.map((stat) => {
               const Icon = stat.icon;
 
               return (
                 <div
                   key={stat.label}
-                  className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+                  className="min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-5"
                 >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-slate-500">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-xs text-slate-500 sm:text-sm">
                         {stat.label}
                       </p>
 
-                      <h2 className="mt-2 text-3xl font-bold text-slate-900">
+                      <h2 className="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">
                         {stat.value}
                       </h2>
                     </div>
 
-                    <div className={`rounded-lg p-3 ${stat.color}`}>
-                      <Icon size={24} />
+                    <div className={`flex-shrink-0 rounded-lg p-2 sm:p-3 ${stat.color}`}>
+                      <Icon size={20} className="sm:h-6 sm:w-6" />
                     </div>
                   </div>
                 </div>
@@ -425,27 +419,31 @@ function Transportation() {
 
           {/* Messages */}
           {error && (
-            <div className="mb-5 flex items-center gap-2 rounded-lg bg-red-50 p-4 text-red-700">
-              <AlertCircle size={18} />
-              <span>{error}</span>
+            <div
+              role="alert"
+              className="mb-5 flex items-start gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700 sm:p-4 sm:text-base"
+            >
+              <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
+              <span className="break-words">{error}</span>
             </div>
           )}
 
           {success && (
-            <div className="mb-5 rounded-lg bg-green-50 p-4 text-green-700">
+            <div
+              role="status"
+              className="mb-5 rounded-lg bg-green-50 p-3 text-sm text-green-700 sm:p-4 sm:text-base"
+            >
               {success}
             </div>
           )}
 
           {/* Add / Edit Form */}
           {formOpen && (
-            <div className="mb-8 rounded-xl border border-slate-200 bg-white p-5 shadow-sm md:p-7">
-              <div className="mb-6 flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900">
-                    {editingId
-                      ? "Edit Transportation"
-                      : "Add Transportation"}
+            <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:mb-8 sm:p-6 md:p-7">
+              <div className="mb-6 flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h2 className="text-lg font-bold text-slate-900 sm:text-xl">
+                    {editingId ? "Edit Transportation" : "Add Transportation"}
                   </h2>
 
                   <p className="mt-1 text-sm text-slate-500">
@@ -456,34 +454,33 @@ function Transportation() {
                 <button
                   type="button"
                   onClick={() => setFormOpen(false)}
-                  className="rounded-lg p-2 text-slate-500 hover:bg-slate-100"
+                  aria-label="Close transportation form"
+                  className="flex-shrink-0 rounded-lg p-2 text-slate-500 transition hover:bg-slate-100"
                 >
                   <X size={22} />
                 </button>
               </div>
 
               <form onSubmit={handleSubmit}>
-                <div className="grid gap-5 md:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2">
 
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <div className="min-w-0">
+                    <label htmlFor="shipment_id" className="mb-2 block text-sm font-medium text-slate-700">
                       Select Shipment *
                     </label>
 
                     <select
+                      id="shipment_id"
                       name="shipment_id"
                       value={form.shipment_id}
                       onChange={handleChange}
                       required
-                      className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-lg border border-slate-300 bg-white px-3 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:px-4 sm:text-base"
                     >
                       <option value="">Choose a shipment</option>
 
                       {shipments.map((shipment) => (
-                        <option
-                          key={shipment.id}
-                          value={shipment.id}
-                        >
+                        <option key={shipment.id} value={shipment.id}>
                           {shipment.tracking_number} — {shipment.origin} to {shipment.destination}
                         </option>
                       ))}
@@ -496,16 +493,17 @@ function Transportation() {
                     )}
                   </div>
 
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <div className="min-w-0">
+                    <label htmlFor="transport_type" className="mb-2 block text-sm font-medium text-slate-700">
                       Transport Type *
                     </label>
 
                     <select
+                      id="transport_type"
                       name="transport_type"
                       value={form.transport_type}
                       onChange={handleChange}
-                      className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:px-4 sm:text-base"
                     >
                       {transportTypes.map((type) => (
                         <option key={type} value={type}>
@@ -515,31 +513,33 @@ function Transportation() {
                     </select>
                   </div>
 
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <div className="min-w-0">
+                    <label htmlFor="vehicle_reference" className="mb-2 block text-sm font-medium text-slate-700">
                       Vehicle Reference *
                     </label>
 
                     <input
+                      id="vehicle_reference"
                       name="vehicle_reference"
                       value={form.vehicle_reference}
                       onChange={handleChange}
                       placeholder="e.g. KDA 123A / Vessel name"
                       required
-                      className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="w-full rounded-lg border border-slate-300 px-3 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:px-4 sm:text-base"
                     />
                   </div>
 
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <div className="min-w-0">
+                    <label htmlFor="status" className="mb-2 block text-sm font-medium text-slate-700">
                       Status *
                     </label>
 
                     <select
+                      id="status"
                       name="status"
                       value={form.status}
                       onChange={handleChange}
-                      className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:px-4 sm:text-base"
                     >
                       {statuses.map((status) => (
                         <option key={status} value={status}>
@@ -549,72 +549,76 @@ function Transportation() {
                     </select>
                   </div>
 
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <div className="min-w-0">
+                    <label htmlFor="departure_location" className="mb-2 block text-sm font-medium text-slate-700">
                       Departure Location *
                     </label>
 
                     <input
+                      id="departure_location"
                       name="departure_location"
                       value={form.departure_location}
                       onChange={handleChange}
                       placeholder="Enter departure location"
                       required
-                      className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="w-full rounded-lg border border-slate-300 px-3 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:px-4 sm:text-base"
                     />
                   </div>
 
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <div className="min-w-0">
+                    <label htmlFor="arrival_location" className="mb-2 block text-sm font-medium text-slate-700">
                       Arrival Location *
                     </label>
 
                     <input
+                      id="arrival_location"
                       name="arrival_location"
                       value={form.arrival_location}
                       onChange={handleChange}
                       placeholder="Enter arrival location"
                       required
-                      className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="w-full rounded-lg border border-slate-300 px-3 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:px-4 sm:text-base"
                     />
                   </div>
 
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <div className="min-w-0">
+                    <label htmlFor="departure_date" className="mb-2 block text-sm font-medium text-slate-700">
                       Departure Date *
                     </label>
 
                     <input
+                      id="departure_date"
                       type="datetime-local"
                       name="departure_date"
                       value={form.departure_date}
                       onChange={handleChange}
                       required
-                      className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-lg border border-slate-300 px-3 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:px-4 sm:text-base"
                     />
                   </div>
 
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <div className="min-w-0">
+                    <label htmlFor="arrival_date" className="mb-2 block text-sm font-medium text-slate-700">
                       Arrival Date *
                     </label>
 
                     <input
+                      id="arrival_date"
                       type="datetime-local"
                       name="arrival_date"
                       value={form.arrival_date}
                       onChange={handleChange}
                       required
-                      className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-lg border border-slate-300 px-3 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:px-4 sm:text-base"
                     />
                   </div>
                 </div>
 
-                <div className="mt-7 flex flex-wrap gap-3">
+                <div className="mt-6 grid grid-cols-1 gap-3 sm:flex sm:flex-wrap sm:mt-7">
                   <button
                     type="submit"
                     disabled={saving || shipments.length === 0}
-                    className="rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                    className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-blue-700 disabled:opacity-50 sm:text-base"
                   >
                     {saving
                       ? "Saving..."
@@ -626,7 +630,7 @@ function Transportation() {
                   <button
                     type="button"
                     onClick={() => setFormOpen(false)}
-                    className="rounded-lg border border-slate-300 px-6 py-3 font-medium text-slate-700 hover:bg-slate-50"
+                    className="rounded-lg border border-slate-300 px-6 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 sm:text-base"
                   >
                     Cancel
                   </button>
@@ -636,7 +640,7 @@ function Transportation() {
           )}
 
           {/* Search */}
-          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="mb-5 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:mb-6 sm:p-4">
             <div className="relative">
               <Search
                 size={20}
@@ -648,25 +652,26 @@ function Transportation() {
                 placeholder="Search tracking number, vehicle, transport type or location..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 py-3 pl-10 pr-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                aria-label="Search transportation records"
+                className="w-full rounded-lg border border-slate-300 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:text-base"
               />
             </div>
           </div>
 
           {/* Transportation Table */}
           <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-            <div className="border-b border-slate-200 p-5">
-              <h2 className="text-lg font-semibold text-slate-900">
+            <div className="border-b border-slate-200 p-4 sm:p-5">
+              <h2 className="text-base font-semibold text-slate-900 sm:text-lg">
                 All Transportation Records ({filteredRecords.length})
               </h2>
             </div>
 
             {loading ? (
-              <div className="p-10 text-center text-slate-500">
+              <div className="p-8 text-center text-sm text-slate-500 sm:p-10 sm:text-base">
                 Loading transportation records...
               </div>
             ) : filteredRecords.length === 0 ? (
-              <div className="p-10 text-center">
+              <div className="p-8 text-center sm:p-10">
                 <Truck size={40} className="mx-auto mb-3 text-slate-300" />
 
                 <p className="font-medium text-slate-700">
@@ -679,60 +684,57 @@ function Transportation() {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead className="bg-slate-50 text-sm text-slate-600">
+                <table className="w-full min-w-[900px] text-left">
+                  <thead className="bg-slate-50 text-xs text-slate-600 sm:text-sm">
                     <tr>
-                      <th className="p-4">Shipment</th>
-                      <th className="p-4">Transport</th>
-                      <th className="p-4">Route</th>
-                      <th className="p-4">Schedule</th>
-                      <th className="p-4">Status</th>
-                      <th className="p-4">Actions</th>
+                      <th className="p-3 sm:p-4">Shipment</th>
+                      <th className="p-3 sm:p-4">Transport</th>
+                      <th className="p-3 sm:p-4">Route</th>
+                      <th className="p-3 sm:p-4">Schedule</th>
+                      <th className="p-3 sm:p-4">Status</th>
+                      <th className="p-3 sm:p-4">Actions</th>
                     </tr>
                   </thead>
 
                   <tbody className="divide-y divide-slate-100">
                     {filteredRecords.map((record) => (
-                      <tr
-                        key={record.id}
-                        className="hover:bg-slate-50"
-                      >
-                        <td className="p-4">
-                          <span className="font-semibold text-blue-700">
+                      <tr key={record.id} className="transition hover:bg-slate-50">
+                        <td className="max-w-[220px] p-3 sm:p-4">
+                          <span className="break-all font-semibold text-blue-700">
                             {record.shipments?.tracking_number || "Unknown shipment"}
                           </span>
 
-                          <p className="mt-1 text-xs text-slate-400">
+                          <p className="mt-1 break-words text-xs text-slate-400">
                             {record.shipments?.origin || "N/A"} → {record.shipments?.destination || "N/A"}
                           </p>
                         </td>
 
-                        <td className="p-4">
+                        <td className="p-3 sm:p-4">
                           <div className="flex items-center gap-2 text-sm font-medium text-slate-800">
-                            <Truck size={16} className="text-blue-600" />
+                            <Truck size={16} className="flex-shrink-0 text-blue-600" />
                             {record.transport_type}
                           </div>
 
-                          <p className="mt-1 text-xs text-slate-500">
+                          <p className="mt-1 max-w-[160px] break-words text-xs text-slate-500">
                             {record.vehicle_reference}
                           </p>
                         </td>
 
-                        <td className="p-4 text-sm text-slate-700">
-                          <div className="flex items-center gap-1">
-                            <MapPin size={14} />
+                        <td className="max-w-[190px] p-3 text-sm text-slate-700 sm:p-4">
+                          <div className="flex items-start gap-1 break-words">
+                            <MapPin size={14} className="mt-0.5 flex-shrink-0" />
                             {record.departure_location}
                           </div>
 
-                          <p className="mt-1 text-slate-400">
+                          <p className="mt-1 break-words text-slate-400">
                             → {record.arrival_location}
                           </p>
                         </td>
 
-                        <td className="p-4 text-sm text-slate-600">
-                          <div className="flex items-center gap-1">
-                            <Calendar size={14} />
-                            {formatDate(record.departure_date)}
+                        <td className="p-3 text-sm text-slate-600 sm:p-4">
+                          <div className="flex items-start gap-1">
+                            <Calendar size={14} className="mt-0.5 flex-shrink-0" />
+                            <span>{formatDate(record.departure_date)}</span>
                           </div>
 
                           <p className="mt-1 text-xs text-slate-400">
@@ -740,7 +742,7 @@ function Transportation() {
                           </p>
                         </td>
 
-                        <td className="p-4">
+                        <td className="p-3 sm:p-4">
                           <div className="flex flex-col items-start gap-2">
                             <span
                               className={`rounded-full px-3 py-1 text-xs font-semibold ${getStatusStyle(record.status)}`}
@@ -749,11 +751,12 @@ function Transportation() {
                             </span>
 
                             <select
+                              aria-label={`Update status for ${record.shipments?.tracking_number || "shipment"}`}
                               value={record.status}
                               onChange={(e) =>
                                 updateStatus(record.id, e.target.value)
                               }
-                              className="rounded-md border border-slate-300 p-2 text-xs"
+                              className="max-w-full rounded-md border border-slate-300 p-2 text-xs"
                             >
                               {statuses.map((status) => (
                                 <option key={status} value={status}>
@@ -764,12 +767,12 @@ function Transportation() {
                           </div>
                         </td>
 
-                        <td className="p-4">
+                        <td className="p-3 sm:p-4">
                           <div className="flex flex-col gap-3">
                             <button
                               type="button"
                               onClick={() => openEditForm(record)}
-                              className="flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-800"
+                              className="flex items-center gap-2 text-sm font-medium text-blue-600 transition hover:text-blue-800"
                             >
                               <Pencil size={16} />
                               Edit
@@ -778,7 +781,7 @@ function Transportation() {
                             <button
                               type="button"
                               onClick={() => deleteRecord(record)}
-                              className="flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-800"
+                              className="flex items-center gap-2 text-sm font-medium text-red-600 transition hover:text-red-800"
                             >
                               <Trash2 size={16} />
                               Delete
@@ -793,7 +796,7 @@ function Transportation() {
             )}
           </div>
 
-          <p className="mt-5 text-sm text-slate-400">
+          <p className="mt-4 text-xs text-slate-400 sm:mt-5 sm:text-sm">
             Transportation records are saved directly to the CargoFlow database.
           </p>
         </div>
