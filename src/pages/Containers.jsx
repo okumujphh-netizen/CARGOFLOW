@@ -1,8 +1,8 @@
+
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import Sidebar from "../components/Sidebar";
 import {
-    Container,
     Search,
     RefreshCw,
     Trash2,
@@ -10,8 +10,8 @@ import {
     Edit,
     AlertCircle,
     X,
+    Container,
 } from "lucide-react";
-
 
 function Containers() {
     const [containers, setContainers] = useState([]);
@@ -30,7 +30,6 @@ function Containers() {
         capacity: "",
         status: "available",
     };
-
 
     const [form, setForm] = useState(emptyForm);
 
@@ -58,7 +57,6 @@ function Containers() {
         fetchContainers();
     }, []);
 
-
     const openAddForm = () => {
         setForm(emptyForm);
         setEditingId(null);
@@ -66,7 +64,6 @@ function Containers() {
         setError("");
         setSuccess("");
     };
-
 
     const openEditForm = (item) => {
         setForm({
@@ -81,7 +78,6 @@ function Containers() {
         setError("");
         setSuccess("");
     };
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -124,7 +120,6 @@ function Containers() {
                 .from("containers")
                 .update(containerData)
                 .eq("id", editingId);
-
         } else {
             result = await supabase
                 .from("containers")
@@ -174,7 +169,6 @@ function Containers() {
         }
     };
 
-
     const deleteContainer = async (item) => {
         const confirmed = window.confirm(
             `Are you sure you want to delete container ${item.container_number}?`
@@ -204,7 +198,6 @@ function Containers() {
         setDeletingId(null);
     };
 
-
     const filteredContainers = containers.filter((item) => {
         const searchText = [
             item.container_number,
@@ -227,44 +220,68 @@ function Containers() {
 
         return styles[status] || "bg-gray-100 text-gray-700";
     };
-    const formatStatus = (status) =>
+
+    const formatStatus = (status = "") =>
         status.replace("_", " ").replace(/\b\w/g, (letter) =>
             letter.toUpperCase()
         );
+
+    const statistics = [
+        {
+            label: "Total Containers",
+            value: containers.length,
+        },
+        {
+            label: "Available",
+            value: containers.filter((c) => c.status === "available").length,
+        },
+        {
+            label: "Assigned",
+            value: containers.filter((c) => c.status === "assigned").length,
+        },
+        {
+            label: "Maintenance",
+            value: containers.filter((c) => c.status === "maintenance").length,
+        },
+    ];
 
     return (
         <div className="min-h-screen bg-slate-100 flex">
             <Sidebar role="admin" />
 
-            <main className="flex-1 min-w-0 p-4 md:p-8">
+            <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8">
                 <div className="max-w-7xl mx-auto">
 
                     {/* Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
                         <div>
-                            <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+                            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
                                 Container Management
                             </h1>
 
-                            <p className="text-slate-500 mt-2">
+                            <p className="text-sm sm:text-base text-slate-500 mt-2">
                                 Add, view and manage shipping containers.
                             </p>
                         </div>
 
-                        <div className="flex flex-wrap gap-3">
+                        <div className="grid grid-cols-2 sm:flex gap-2 sm:gap-3">
                             <button
+                                type="button"
                                 onClick={fetchContainers}
                                 disabled={loading}
-                                className="flex items-center justify-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 disabled:opacity-50 text-slate-700 px-4 py-3 rounded-lg font-medium"
+                                className="flex items-center justify-center gap-2 bg-white border border-slate-300 hover:bg-slate-50 disabled:opacity-50 text-slate-700 px-3 sm:px-4 py-3 rounded-lg text-sm font-medium transition"
                             >
-                                <RefreshCw size={18} />
+                                <RefreshCw
+                                    size={18}
+                                    className={loading ? "animate-spin" : ""}
+                                />
                                 Refresh
                             </button>
 
                             <button
                                 type="button"
                                 onClick={openAddForm}
-                                className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-medium"
+                                className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-5 py-3 rounded-lg text-sm font-medium transition"
                             >
                                 <Plus size={18} />
                                 Add Container
@@ -273,31 +290,17 @@ function Containers() {
                     </div>
 
                     {/* Statistics */}
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                        {[
-                            {
-                                label: "Total Containers",
-                                value: containers.length,
-                            },
-                            {
-                                label: "Available",
-                                value: containers.filter((c) => c.status === "available").length,
-                            },
-                            {
-                                label: "Assigned",
-                                value: containers.filter((c) => c.status === "assigned").length,
-                            },
-                            {
-                                label: "Maintenance",
-                                value: containers.filter((c) => c.status === "maintenance").length,
-                            },
-                        ].map((stat) => (
+                    <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                        {statistics.map((stat) => (
                             <div
                                 key={stat.label}
-                                className="bg-white rounded-xl p-5 shadow-sm border border-slate-200"
+                                className="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-slate-200"
                             >
-                                <p className="text-sm text-slate-500">{stat.label}</p>
-                                <p className="text-2xl font-bold text-slate-900 mt-2">
+                                <p className="text-xs sm:text-sm text-slate-500">
+                                    {stat.label}
+                                </p>
+
+                                <p className="text-xl sm:text-2xl font-bold text-slate-900 mt-2">
                                     {stat.value}
                                 </p>
                             </div>
@@ -306,62 +309,78 @@ function Containers() {
 
                     {/* Messages */}
                     {error && (
-                        <div className="mb-5 p-4 rounded-lg bg-red-50 text-red-700 flex gap-2 items-center">
-                            <AlertCircle size={18} />
-                            <span>{error}</span>
+                        <div
+                            role="alert"
+                            className="mb-5 p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 flex items-start gap-3"
+                        >
+                            <AlertCircle size={18} className="shrink-0 mt-0.5" />
+                            <span className="text-sm break-words">{error}</span>
                         </div>
                     )}
 
                     {success && (
-                        <div className="mb-5 p-4 rounded-lg bg-green-50 text-green-700">
+                        <div
+                            role="status"
+                            className="mb-5 p-4 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm"
+                        >
                             {success}
                         </div>
                     )}
 
                     {/* Add/Edit Form */}
                     {showForm && (
-                        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 mb-6">
-                            <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-lg font-semibold text-slate-900">
+                        <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-slate-200 mb-6">
+                            <div className="flex items-center justify-between gap-3 mb-6">
+                                <h2 className="text-base sm:text-lg font-semibold text-slate-900">
                                     {editingId ? "Edit Container" : "Add New Container"}
                                 </h2>
 
                                 <button
+                                    type="button"
                                     onClick={() => setShowForm(false)}
-                                    className="text-slate-400 hover:text-slate-700"
+                                    aria-label="Close container form"
+                                    className="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
                                 >
                                     <X size={22} />
                                 </button>
                             </div>
 
                             <form onSubmit={saveContainer}>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-2">
+                                        <label
+                                            htmlFor="container_number"
+                                            className="block text-sm font-medium text-slate-700 mb-2"
+                                        >
                                             Container Number
                                         </label>
 
                                         <input
+                                            id="container_number"
                                             type="text"
                                             name="container_number"
                                             value={form.container_number}
                                             onChange={handleChange}
                                             placeholder="e.g. CFCU1234567"
-                                            className="w-full border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm sm:text-base outline-none focus:ring-2 focus:ring-blue-500"
                                             required
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-2">
+                                        <label
+                                            htmlFor="container_type"
+                                            className="block text-sm font-medium text-slate-700 mb-2"
+                                        >
                                             Container Type
                                         </label>
 
                                         <select
+                                            id="container_type"
                                             name="container_type"
                                             value={form.container_type}
                                             onChange={handleChange}
-                                            className="w-full border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm sm:text-base outline-none focus:ring-2 focus:ring-blue-500"
                                             required
                                         >
                                             <option value="">Select container type</option>
@@ -375,11 +394,15 @@ function Containers() {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-2">
+                                        <label
+                                            htmlFor="capacity"
+                                            className="block text-sm font-medium text-slate-700 mb-2"
+                                        >
                                             Capacity
                                         </label>
 
                                         <input
+                                            id="capacity"
                                             type="number"
                                             name="capacity"
                                             value={form.capacity}
@@ -387,7 +410,7 @@ function Containers() {
                                             placeholder="Enter capacity"
                                             min="1"
                                             step="any"
-                                            className="w-full border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm sm:text-base outline-none focus:ring-2 focus:ring-blue-500"
                                             required
                                         />
 
@@ -397,15 +420,19 @@ function Containers() {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-2">
+                                        <label
+                                            htmlFor="container_status"
+                                            className="block text-sm font-medium text-slate-700 mb-2"
+                                        >
                                             Status
                                         </label>
 
                                         <select
+                                            id="container_status"
                                             name="status"
                                             value={form.status}
                                             onChange={handleChange}
-                                            className="w-full border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm sm:text-base outline-none focus:ring-2 focus:ring-blue-500"
                                         >
                                             {statuses.map((status) => (
                                                 <option key={status} value={status}>
@@ -416,11 +443,11 @@ function Containers() {
                                     </div>
                                 </div>
 
-                                <div className="flex flex-wrap gap-3 mt-6">
+                                <div className="flex flex-col sm:flex-row gap-3 mt-6">
                                     <button
                                         type="submit"
                                         disabled={saving}
-                                        className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-6 py-3 rounded-lg font-medium"
+                                        className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-6 py-3 rounded-lg font-medium transition"
                                     >
                                         {saving
                                             ? "Saving..."
@@ -432,7 +459,7 @@ function Containers() {
                                     <button
                                         type="button"
                                         onClick={() => setShowForm(false)}
-                                        className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-3 rounded-lg font-medium"
+                                        className="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-3 rounded-lg font-medium transition"
                                     >
                                         Cancel
                                     </button>
@@ -443,6 +470,10 @@ function Containers() {
 
                     {/* Search */}
                     <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200 mb-6">
+                        <label htmlFor="container-search" className="sr-only">
+                            Search containers
+                        </label>
+
                         <div className="relative">
                             <Search
                                 size={20}
@@ -450,35 +481,47 @@ function Containers() {
                             />
 
                             <input
+                                id="container-search"
                                 type="text"
                                 placeholder="Search container number, type or status..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="w-full border border-slate-300 rounded-lg pl-10 pr-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full border border-slate-300 rounded-lg pl-10 pr-4 py-3 text-sm sm:text-base outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                     </div>
 
                     {/* Containers Table */}
                     <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div className="p-5 border-b border-slate-200">
-                            <h2 className="text-lg font-semibold text-slate-900">
+                        <div className="p-4 sm:p-5 border-b border-slate-200">
+                            <h2 className="text-base sm:text-lg font-semibold text-slate-900">
                                 All Containers ({filteredContainers.length})
                             </h2>
                         </div>
 
                         {loading ? (
                             <div className="p-10 text-center text-slate-500">
+                                <RefreshCw
+                                    size={20}
+                                    className="animate-spin mx-auto mb-3"
+                                />
                                 Loading containers...
                             </div>
                         ) : filteredContainers.length === 0 ? (
                             <div className="p-10 text-center text-slate-500">
-                                No containers found. Add your first container to get started.
+                                <Container
+                                    size={40}
+                                    className="mx-auto mb-3 text-slate-300"
+                                />
+                                <p>No containers found.</p>
+                                <p className="text-sm mt-2">
+                                    Add your first container to get started.
+                                </p>
                             </div>
                         ) : (
                             <div className="overflow-x-auto">
-                                <table className="w-full text-left">
-                                    <thead className="bg-slate-50 text-slate-600 text-sm">
+                                <table className="w-full min-w-[750px] text-left">
+                                    <thead className="bg-slate-50 text-slate-600 text-xs sm:text-sm">
                                         <tr>
                                             <th className="p-4">Container Number</th>
                                             <th className="p-4">Container Type</th>
@@ -490,9 +533,12 @@ function Containers() {
 
                                     <tbody className="divide-y divide-slate-100">
                                         {filteredContainers.map((item) => (
-                                            <tr key={item.id} className="hover:bg-slate-50">
+                                            <tr
+                                                key={item.id}
+                                                className="hover:bg-slate-50 transition"
+                                            >
                                                 <td className="p-4">
-                                                    <span className="font-semibold text-blue-700">
+                                                    <span className="font-semibold text-blue-700 break-words">
                                                         {item.container_number}
                                                     </span>
                                                 </td>
@@ -508,17 +554,18 @@ function Containers() {
                                                 <td className="p-4">
                                                     <div className="flex flex-col gap-2 items-start">
                                                         <span
-                                                            className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusStyle(item.status)}`}
+                                                            className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${getStatusStyle(item.status)}`}
                                                         >
                                                             {formatStatus(item.status)}
                                                         </span>
 
                                                         <select
-                                                            value={item.status}
+                                                            aria-label={`Update status for ${item.container_number}`}
+                                                            value={item.status || "available"}
                                                             onChange={(e) =>
                                                                 updateStatus(item.id, e.target.value)
                                                             }
-                                                            className="text-xs border border-slate-300 rounded-md p-2"
+                                                            className="text-xs border border-slate-300 rounded-md p-2 bg-white"
                                                         >
                                                             {statuses.map((status) => (
                                                                 <option key={status} value={status}>
@@ -532,20 +579,24 @@ function Containers() {
                                                 <td className="p-4">
                                                     <div className="flex flex-wrap gap-3">
                                                         <button
+                                                            type="button"
                                                             onClick={() => openEditForm(item)}
-                                                            className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium"
+                                                            className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium transition"
                                                         >
                                                             <Edit size={16} />
                                                             Edit
                                                         </button>
 
                                                         <button
+                                                            type="button"
                                                             onClick={() => deleteContainer(item)}
                                                             disabled={deletingId === item.id}
-                                                            className="flex items-center gap-1 text-red-600 hover:text-red-800 disabled:opacity-50 text-sm font-medium"
+                                                            className="flex items-center gap-1 text-red-600 hover:text-red-800 disabled:opacity-50 text-sm font-medium transition"
                                                         >
                                                             <Trash2 size={16} />
-                                                            {deletingId === item.id ? "Deleting..." : "Delete"}
+                                                            {deletingId === item.id
+                                                                ? "Deleting..."
+                                                                : "Delete"}
                                                         </button>
                                                     </div>
                                                 </td>
@@ -557,7 +608,7 @@ function Containers() {
                         )}
                     </div>
 
-                    <p className="text-sm text-slate-400 mt-5">
+                    <p className="text-xs sm:text-sm text-slate-400 mt-5">
                         Container records are saved directly to the CargoFlow database.
                     </p>
                 </div>
@@ -567,8 +618,3 @@ function Containers() {
 }
 
 export default Containers;
-
-
-
-
-
