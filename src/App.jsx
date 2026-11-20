@@ -12,6 +12,7 @@ import AdminShipments from "./pages/AdminShipments";
 import Containers from "./pages/Containers";
 import TrackShipment from "./pages/TrackShipment";
 import Customers from "./pages/Customers";
+import Transportation from "./pages/Transportation";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -93,6 +94,15 @@ function App() {
         element={
           <ProtectedRoute allowedRole="admin">
             <Customers />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/transportation"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <Transportation />
           </ProtectedRoute>
         }
       />
