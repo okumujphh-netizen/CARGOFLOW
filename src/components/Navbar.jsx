@@ -1,5 +1,6 @@
 
 
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Ship, Menu, X } from "lucide-react";
@@ -10,31 +11,35 @@ function Navbar() {
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <nav className="bg-white shadow-sm px-6 md:px-12 py-4 relative z-30">
+    <nav className="bg-white shadow-sm px-4 sm:px-6 md:px-12 py-4 relative z-30">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
 
         {/* Logo */}
-        <Link to="/" onClick={closeMenu} className="flex items-center gap-2">
+        <Link
+          to="/"
+          onClick={closeMenu}
+          className="flex items-center gap-2 shrink-0"
+        >
           <div className="bg-blue-600 text-white p-2 rounded-lg">
             <Ship size={24} />
           </div>
 
-          <span className="text-2xl font-bold text-slate-900">
+          <span className="text-xl sm:text-2xl font-bold text-slate-900">
             Cargo<span className="text-blue-600">Flow</span>
           </span>
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-slate-600 hover:text-blue-600">
+          <Link to="/" className="text-slate-600 hover:text-blue-600 transition">
             Home
           </Link>
 
-          <a href="#services" className="text-slate-600 hover:text-blue-600">
+          <a href="/#services" className="text-slate-600 hover:text-blue-600 transition">
             Services
           </a>
 
-          <a href="#about" className="text-slate-600 hover:text-blue-600">
+          <a href="/#about" className="text-slate-600 hover:text-blue-600 transition">
             About
           </a>
         </div>
@@ -43,7 +48,7 @@ function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           <Link
             to="/login"
-            className="text-slate-700 font-medium hover:text-blue-600"
+            className="text-slate-700 font-medium hover:text-blue-600 transition"
           >
             Login
           </Link>
@@ -58,10 +63,12 @@ function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
+          type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-slate-700 p-2"
+          className="md:hidden text-slate-700 p-2 rounded-lg hover:bg-slate-100 transition"
           aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={isOpen}
+          aria-controls="mobile-navigation"
         >
           {isOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
@@ -69,11 +76,14 @@ function Navbar() {
 
       {/* Mobile Navigation */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg px-6 py-6 space-y-5">
+        <div
+          id="mobile-navigation"
+          className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg px-6 py-6 space-y-5 border-t border-slate-100"
+        >
           <Link
             to="/"
             onClick={closeMenu}
-            className="block text-slate-600 hover:text-blue-600"
+            className="block text-slate-600 hover:text-blue-600 transition"
           >
             Home
           </Link>
@@ -81,7 +91,7 @@ function Navbar() {
           <a
             href="/#services"
             onClick={closeMenu}
-            className="block text-slate-600 hover:text-blue-600"
+            className="block text-slate-600 hover:text-blue-600 transition"
           >
             Services
           </a>
@@ -89,7 +99,7 @@ function Navbar() {
           <a
             href="/#about"
             onClick={closeMenu}
-            className="block text-slate-600 hover:text-blue-600"
+            className="block text-slate-600 hover:text-blue-600 transition"
           >
             About
           </a>
@@ -99,7 +109,7 @@ function Navbar() {
           <Link
             to="/login"
             onClick={closeMenu}
-            className="block text-slate-700 font-medium"
+            className="block text-slate-700 font-medium hover:text-blue-600 transition"
           >
             Login
           </Link>
@@ -107,7 +117,7 @@ function Navbar() {
           <Link
             to="/register"
             onClick={closeMenu}
-            className="block text-center bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-medium"
+            className="block text-center bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-medium transition"
           >
             Register
           </Link>
