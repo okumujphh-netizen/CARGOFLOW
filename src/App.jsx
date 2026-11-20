@@ -11,6 +11,7 @@ import MyShipments from "./pages/myshipments";
 import AdminShipments from "./pages/AdminShipments";
 import Containers from "./pages/Containers";
 import TrackShipment from "./pages/TrackShipment";
+import Customers from "./pages/Customers";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -50,7 +51,7 @@ function App() {
         }
       />
 
-       <Route
+      <Route
         path="/track-shipment"
         element={
           <ProtectedRoute allowedRole="customer">
@@ -86,11 +87,21 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/customers"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <Customers />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
 
 export default App;
+
 
 
 
