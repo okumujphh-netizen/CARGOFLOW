@@ -1,5 +1,4 @@
 
-
 import { useState } from "react";
 
 import {
@@ -15,6 +14,7 @@ import {
   Search,
   Menu,
   X,
+  Bell,
 } from "lucide-react";
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -28,6 +28,7 @@ function Sidebar({ role = "customer" }) {
     { name: "My Shipments", path: "/shipments", icon: Package },
     { name: "Book Shipment", path: "/book-shipment", icon: PlusCircle },
     { name: "Track Shipment", path: "/track-shipment", icon: Search },
+    { name: "Notifications", path: "/notifications", icon: Bell },
     { name: "Settings", path: "/settings", icon: Settings },
   ];
 
@@ -39,6 +40,7 @@ function Sidebar({ role = "customer" }) {
     { name: "Customers", path: "/customers", icon: Users },
     { name: "Settings", path: "/settings", icon: Settings },
   ];
+
   const menuItems = role === "admin" ? adminMenu : customerMenu;
 
   return (
@@ -107,9 +109,10 @@ function Sidebar({ role = "customer" }) {
                 end={item.path === "/dashboard" || item.path === "/admin"}
                 onClick={() => setIsOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-3 rounded-lg transition ${isActive
-                    ? "bg-blue-600 text-white"
-                    : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                  `flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+                    isActive
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-400 hover:bg-slate-800 hover:text-white"
                   }`
                 }
               >
