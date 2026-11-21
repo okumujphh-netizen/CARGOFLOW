@@ -1,6 +1,6 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import MyShipments from "../pages/myshipments";
 import { supabase } from "../lib/supabase";
@@ -88,8 +88,7 @@ describe("MyShipments", () => {
   afterEach(() => {
     cleanup();
   });
-
-  it("displays the loading state while shipments are being fetched", () => {
+  it("displays the loading state while shipments are being fetched", async () => {
     let resolveShipments;
 
     orderMock.mockReturnValue(
@@ -104,11 +103,14 @@ describe("MyShipments", () => {
       screen.getByText(/loading your shipments/i)
     ).toBeInTheDocument();
 
-    resolveShipments({
-      data: [],
-      error: null,
+    await act(async () => {
+      resolveShipments({
+        data: [],
+        error: null,
+      });
     });
   });
+
 
   it("fetches and displays the customer's shipments", async () => {
     renderMyShipments();
