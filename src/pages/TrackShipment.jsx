@@ -1,0 +1,373 @@
+
+import { useState } from "react";
+import {
+    Search,
+    Package,
+    MapPin,
+    CalendarDays,
+    CheckCircle2,
+    Circle,
+    Truck,
+    AlertCircle,
+    Clock,
+} from "lucide-react";
+
+import Sidebar from "../components/Sidebar";
+import { supabase } from "../lib/supabase";
+
+function TrackShipment() {
+    const [trackingNumber, setTrackingNumber] = useState("");
+    const [shipment, setShipment] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const stages = [
+        { value: "pending", label: "Booking Received" },
+        { value: "confirmed", label: "Shipment Confirmed" },
+        { value: "in_transit", label: "In Transit" },
+        { value: "delivered", label: "Delivered" },
+    ];
+
+    async function handleTrack(e) {
+        e.preventDefault();
+
+        if (!trackingNumber.trim()) {
+            setError("Please enter a tracking number.");
+            return;
+        }
+
+        setLoading(true);
+        setError("");
+        setShipment(null);
+
+        try {
+            const {
+                data: { user },
+                error: userError,
+            } = await supabase.auth.getUser();
+
+            if (userError || !user) {
+                throw new Error("Unable to identify your account. Please log in again.");
+            }
+
+            const { data, error: shipmentError } = await supabase
+                .from("shipments")
+                .select(
+                    "id, tracking_number, origin, destination, cargo_description, status, booking_date, estimated_delivery"
+                )
+                .eq("tracking_number", trackingNumber.trim())
+                .eq("customer_id", user.id)
+                .maybeSingle();
+
+            if (shipmentError) {
+                throw new Error(
+                    "Something went wrong while tracking your shipment. Please try again."
+                );
+            }
+
+            if (!data) {
+                throw new Error(
+                    "No shipment found with that tracking number in your account."
+                );
+            }
+
+            setShipment(data);
+        } catch (err) {
+            setError(err.message || "Unable to track your shipment.");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    function formatDate(date) {
+        if (!date) return "Not available";
+
+        return new Date(date).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        });
+    }
+
+    const currentStage = stages.findIndex(
+        (stage) => stage.value === shipment?.status
+    );
+
+    const isCancelled = shipment?.status === "cancelled";
+
+    function statusLabel(status) {
+        return status
+            ? status.replaceAll("_", " ").replace(/\b\w/g, (char) => char.toUpperCase())
+            : "Unknown";
+    }
+
+    return (
+        <div className="flex min-h-screen bg-slate-50">
+            <Sidebar role="customer" />
+
+            <main className="min-w-0 flex-1 p-4 pt-20 sm:p-6 sm:pt-20 md:p-8 md:pt-8">
+                <div className="mx-auto max-w-5xl">
+
+                    {/* Page heading */}
+                    <div className="mb-6 sm:mb-8">
+                        <p className="mb-2 text-xs sm:text-sm font-medium text-blue-600">
+                            SHIPMENT MANAGEMENT
+                        </p>
+
+                        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">
+                            Track Shipment
+                        </h1>
+
+                        <p className="mt-2 text-sm sm:text-base text-slate-500">
+                            Enter your tracking number to check the latest shipment progress.
+                        </p>
+                    </div>
+
+                    {/* Tracking search */}
+                    <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+                        <form onSubmit={handleTrack}>
+                            <label
+                                htmlFor="trackingNumber"
+                                className="mb-2 block text-sm font-semibold text-slate-700"
+                            >
+                                Tracking Number
+                            </label>
+
+                            <div className="flex flex-col gap-3 sm:flex-row">
+                                <input
+                                    id="trackingNumber"
+                                    type="text"
+                                    value={trackingNumber}
+                                    onChange={(e) => setTrackingNumber(e.target.value)}
+                                    placeholder="Enter your CargoFlow tracking number"
+                                    autoComplete="off"
+                                    className="min-w-0 w-full rounded-lg border border-slate-300 px-3 sm:px-4 py-3 text-sm sm:text-base outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                />
+
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 sm:px-6 py-3 font-semibold text-sm sm:text-base text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                                >
+                                    <Search size={18} />
+                                    {loading ? "Tracking..." : "Track Shipment"}
+                                </button>
+                            </div>
+                        </form>
+
+                        {error && (
+                            <div
+                                role="alert"
+                                className="mt-5 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-3 sm:p-4 text-sm text-red-700"
+                            >
+                                <AlertCircle size={20} className="shrink-0 mt-0.5" />
+                                <p className="break-words">{error}</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Shipment results */}
+                    {shipment && (
+                        <div className="mt-6 sm:mt-8 space-y-5 sm:space-y-6">
+
+                            {/* Shipment details */}
+                            <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+                                <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+                                    <div className="min-w-0">
+                                        <p className="text-sm text-slate-500">
+                                            Tracking Number
+                                        </p>
+
+                                        <h2 className="mt-1 text-lg sm:text-xl font-bold text-slate-900 break-all">
+                                            {shipment.tracking_number}
+                                        </h2>
+                                    </div>
+
+                                    <span className="w-fit rounded-full bg-blue-50 px-4 py-2 text-xs sm:text-sm font-semibold text-blue-700">
+                                        {statusLabel(shipment.status)}
+                                    </span>
+                                </div>
+
+                                <div className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+                                    <div className="flex items-start gap-3 min-w-0">
+                                        <div className="rounded-lg bg-blue-50 p-2.5 sm:p-3 text-blue-600 shrink-0">
+                                            <MapPin size={21} />
+                                        </div>
+
+                                        <div className="min-w-0">
+                                            <p className="text-sm text-slate-500">Origin</p>
+                                            <p className="mt-1 font-semibold text-sm sm:text-base text-slate-900 break-words">
+                                                {shipment.origin}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start gap-3 min-w-0">
+                                        <div className="rounded-lg bg-green-50 p-2.5 sm:p-3 text-green-600 shrink-0">
+                                            <MapPin size={21} />
+                                        </div>
+
+                                        <div className="min-w-0">
+                                            <p className="text-sm text-slate-500">Destination</p>
+                                            <p className="mt-1 font-semibold text-sm sm:text-base text-slate-900 break-words">
+                                                {shipment.destination}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start gap-3 min-w-0">
+                                        <div className="rounded-lg bg-slate-100 p-2.5 sm:p-3 text-slate-600 shrink-0">
+                                            <CalendarDays size={21} />
+                                        </div>
+
+                                        <div className="min-w-0">
+                                            <p className="text-sm text-slate-500">Booking Date</p>
+                                            <p className="mt-1 font-semibold text-sm sm:text-base text-slate-900">
+                                                {formatDate(shipment.booking_date)}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start gap-3 min-w-0">
+                                        <div className="rounded-lg bg-slate-100 p-2.5 sm:p-3 text-slate-600 shrink-0">
+                                            <Clock size={21} />
+                                        </div>
+
+                                        <div className="min-w-0">
+                                            <p className="text-sm text-slate-500">
+                                                Estimated Delivery
+                                            </p>
+                                            <p className="mt-1 font-semibold text-sm sm:text-base text-slate-900">
+                                                {formatDate(shipment.estimated_delivery)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mt-6 border-t border-slate-100 pt-5">
+                                    <p className="text-sm text-slate-500">
+                                        Cargo Description
+                                    </p>
+                                    <p className="mt-1 font-medium text-sm sm:text-base text-slate-800 break-words">
+                                        {shipment.cargo_description || "Not provided"}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Shipment progress */}
+                            <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+                                <div className="mb-6 flex items-center gap-3">
+                                    <Truck className="text-blue-600 shrink-0" size={23} />
+
+                                    <div>
+                                        <h2 className="text-base sm:text-lg font-bold text-slate-900">
+                                            Shipment Progress
+                                        </h2>
+                                        <p className="text-xs sm:text-sm text-slate-500">
+                                            Follow your shipment through each stage.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {isCancelled ? (
+                                    <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-3 sm:p-4 text-red-700">
+                                        <AlertCircle size={22} className="shrink-0" />
+
+                                        <div>
+                                            <p className="font-semibold">
+                                                Shipment Cancelled
+                                            </p>
+                                            <p className="text-sm mt-1">
+                                                This shipment is no longer progressing through delivery.
+                                            </p>
+                                        </div>
+                                    </div>
+                                ) : currentStage === -1 ? (
+                                    <p className="text-sm text-slate-500">
+                                        Progress information is not available for this status.
+                                    </p>
+                                ) : (
+                                    <div className="space-y-5 sm:space-y-6">
+                                        {stages.map((stage, index) => {
+                                            const completed = index <= currentStage;
+                                            const active = index === currentStage;
+
+                                            return (
+                                                <div
+                                                    key={stage.value}
+                                                    className="flex gap-3 sm:gap-4"
+                                                >
+                                                    <div className="flex flex-col items-center shrink-0">
+                                                        {completed ? (
+                                                            <CheckCircle2
+                                                                size={23}
+                                                                className="text-green-600"
+                                                            />
+                                                        ) : (
+                                                            <Circle
+                                                                size={23}
+                                                                className="text-slate-300"
+                                                            />
+                                                        )}
+
+                                                        {index !== stages.length - 1 && (
+                                                            <div
+                                                                className={`mt-2 h-8 w-0.5 ${
+                                                                    index < currentStage
+                                                                        ? "bg-green-500"
+                                                                        : "bg-slate-200"
+                                                                }`}
+                                                            />
+                                                        )}
+                                                    </div>
+
+                                                    <div className="-mt-0.5 min-w-0">
+                                                        <p
+                                                            className={`text-sm sm:text-base font-semibold ${
+                                                                completed
+                                                                    ? "text-slate-900"
+                                                                    : "text-slate-400"
+                                                            }`}
+                                                        >
+                                                            {stage.label}
+                                                        </p>
+
+                                                        {active && (
+                                                            <p className="mt-1 text-xs sm:text-sm font-medium text-blue-600">
+                                                                Current shipment status
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Initial empty state */}
+                    {!shipment && !loading && !error && (
+                        <div className="mt-6 sm:mt-8 rounded-xl border border-dashed border-slate-300 bg-white p-6 sm:p-10 text-center">
+                            <Package
+                                size={42}
+                                className="mx-auto text-slate-300"
+                            />
+
+                            <h2 className="mt-4 font-semibold text-slate-800">
+                                Ready to track your shipment?
+                            </h2>
+
+                            <p className="mt-2 text-sm text-slate-500">
+                                Your shipment details and delivery progress will appear here.
+                            </p>
+                        </div>
+                    )}
+                </div>
+            </main>
+        </div>
+    );
+}
+
+export default TrackShipment;
