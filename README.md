@@ -209,7 +209,7 @@ Live Application: [https://cargoflow-htnh7mvl4-jp-8ebe.vercel.app/]
 
 GitHub Repository: [https://github.com/okumujphh-netizen/CARGOFLOW]
 
-Figma Design: [Insert your Figma project URL]
+Figma Design: [https://www.figma.com/make/P8AOjdLHwU8F2L5llK0lsi/CargoFlow-Shipping-Platform?t=ab0FgE1hFCLDVjq7-0]
 
 ## Future Improvements
 
