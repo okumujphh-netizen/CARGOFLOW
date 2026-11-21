@@ -152,15 +152,15 @@ A Supabase account
 
 1. Clone the repository
 
-git clone https://github.com/okumujphh-netizen/CARGOFLOW.git
+git clone [https://github.com/okumujphh-netizen/CARGOFLOW.git]
 
 2. Navigate into the project
 
-cd CARGOFLOW
+[cd CARGOFLOW]
 
 3. Install dependencies
 
-npm install
+[npm install]
 
 4. Configure environment variables
 
@@ -185,13 +185,13 @@ Open the local URL displayed in your terminal.
 
 CargoFlow uses Vitest and React Testing Library for automated component testing.
 
-Run the test suite:
+{Run the test suite:}
 
-npm run test:run
+{npm run test:run}
 
-Run the production build:
+{Run the production build:}
 
-npm run build
+{npm run build}
 
 The current automated test suite contains 55 passing tests across 8 test files.
 
@@ -215,17 +215,17 @@ Figma Design: [Insert your Figma project URL]
 
 Potential future enhancements include:
 
-Real-time shipment location tracking.
+1.Real-time shipment location tracking.
 
-Integration with shipping and logistics providers.
+2.Integration with shipping and logistics providers.
 
-Email and SMS notifications.
+3.Email and SMS notifications.
 
-Advanced shipment analytics and reporting.
+4.Advanced shipment analytics and reporting.
 
-Expanded automated testing.
+5.Expanded automated testing.
 
-Improved operational reporting for administrators.
+6.Improved operational reporting for administrators.
 
 ## Conclusion
 
