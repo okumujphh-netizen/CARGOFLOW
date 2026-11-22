@@ -211,6 +211,9 @@ GitHub Repository: [https://github.com/okumujphh-netizen/CARGOFLOW]
 
 Figma Design: [https://www.figma.com/make/P8AOjdLHwU8F2L5llK0lsi/CargoFlow-Shipping-Platform?t=ab0FgE1hFCLDVjq7-0]
 
+
+supabase : [https://supabase.com/dashboard/project/iuqqnemhkaqvvixwsuvi]
+
 ## Future Improvements
 
 Potential future enhancements include:
