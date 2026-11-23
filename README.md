@@ -50,6 +50,14 @@ Supabase Row Level Security (RLS).
 
 Database policies restricting access to authorized records.
 
+
+## links and email
+use this email to access the admin dashboard :
+[okumujphh@gmail.com]password :[Johnpaul52#jp]
+
+use this email to access the customer dashboard :
+[okumujohn809@gmail.com] password : [Johnpaul52#jp]
+
 ## Technologies Used
 
 Technology
